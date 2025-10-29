@@ -44,6 +44,494 @@
         "documentation": {}
     },
     {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
+        "label": "glob",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "glob",
+        "description": "glob",
+        "detail": "glob",
+        "documentation": {}
+    },
+    {
+        "label": "shutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "shutil",
+        "description": "shutil",
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "sysconfig",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sysconfig",
+        "description": "sysconfig",
+        "detail": "sysconfig",
+        "documentation": {}
+    },
+    {
+        "label": "tempfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tempfile",
+        "description": "tempfile",
+        "detail": "tempfile",
+        "documentation": {}
+    },
+    {
+        "label": "winreg",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "winreg",
+        "description": "winreg",
+        "detail": "winreg",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "os,",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os.",
+        "description": "os.",
+        "detail": "os.",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "operator",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "operator",
+        "description": "operator",
+        "detail": "operator",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "unittest",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "unittest",
+        "description": "unittest",
+        "detail": "unittest",
+        "documentation": {}
+    },
+    {
+        "label": "warnings",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "warnings",
+        "description": "warnings",
+        "detail": "warnings",
+        "documentation": {}
+    },
+    {
+        "label": "pythoncom",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pythoncom",
+        "description": "pythoncom",
+        "detail": "pythoncom",
+        "documentation": {}
+    },
+    {
+        "label": "win32api",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "win32api",
+        "description": "win32api",
+        "detail": "win32api",
+        "documentation": {}
+    },
+    {
+        "label": "win32con",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "win32con",
+        "description": "win32con",
+        "detail": "win32con",
+        "documentation": {}
+    },
+    {
+        "label": "win32file",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "win32file",
+        "description": "win32file",
+        "detail": "win32file",
+        "documentation": {}
+    },
+    {
+        "label": "wmi",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "wmi",
+        "description": "wmi",
+        "detail": "wmi",
+        "documentation": {}
+    },
+    {
+        "label": "escape",
+        "importPath": "cgi",
+        "description": "cgi",
+        "isExtraImport": true,
+        "detail": "cgi",
+        "documentation": {}
+    },
+    {
+        "label": "make_server",
+        "importPath": "wsgiref.simple_server",
+        "description": "wsgiref.simple_server",
+        "isExtraImport": true,
+        "detail": "wsgiref.simple_server",
+        "documentation": {}
+    },
+    {
+        "label": "request_uri",
+        "importPath": "wsgiref.util",
+        "description": "wsgiref.util",
+        "isExtraImport": true,
+        "detail": "wsgiref.util",
+        "documentation": {}
+    },
+    {
+        "label": "application_uri",
+        "importPath": "wsgiref.util",
+        "description": "wsgiref.util",
+        "isExtraImport": true,
+        "detail": "wsgiref.util",
+        "documentation": {}
+    },
+    {
+        "label": "shift_path_info",
+        "importPath": "wsgiref.util",
+        "description": "wsgiref.util",
+        "isExtraImport": true,
+        "detail": "wsgiref.util",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
+        "documentation": {}
+    },
+    {
+        "label": "gradio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "gradio",
+        "description": "gradio",
+        "detail": "gradio",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "run_agent_once",
+        "importPath": "agent.runtime",
+        "description": "agent.runtime",
+        "isExtraImport": true,
+        "detail": "agent.runtime",
+        "documentation": {}
+    },
+    {
+        "label": "build_demo_graph",
+        "importPath": "agent.runtime",
+        "description": "agent.runtime",
+        "isExtraImport": true,
+        "detail": "agent.runtime",
+        "documentation": {}
+    },
+    {
+        "label": "run_agent_once",
+        "importPath": "agent.runtime",
+        "description": "agent.runtime",
+        "isExtraImport": true,
+        "detail": "agent.runtime",
+        "documentation": {}
+    },
+    {
+        "label": "StateGraph",
+        "importPath": "langgraph.graph",
+        "description": "langgraph.graph",
+        "isExtraImport": true,
+        "detail": "langgraph.graph",
+        "documentation": {}
+    },
+    {
+        "label": "END",
+        "importPath": "langgraph.graph",
+        "description": "langgraph.graph",
+        "isExtraImport": true,
+        "detail": "langgraph.graph",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "TypedDict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "genai",
+        "importPath": "google",
+        "description": "google",
+        "isExtraImport": true,
+        "detail": "google",
+        "documentation": {}
+    },
+    {
+        "label": "psutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "psutil",
+        "description": "psutil",
+        "detail": "psutil",
+        "documentation": {}
+    },
+    {
+        "label": "platform",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "platform",
+        "description": "platform",
+        "detail": "platform",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "build_demo_graph",
+        "importPath": "agent.graph",
+        "description": "agent.graph",
+        "isExtraImport": true,
+        "detail": "agent.graph",
+        "documentation": {}
+    },
+    {
         "label": "bin_dir",
         "kind": 5,
         "importPath": ".venv.Scripts.activate_this",
@@ -125,12 +613,885 @@
         "documentation": {}
     },
     {
+        "label": "Tee",
+        "kind": 6,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "class Tee:\n    def __init__(self, file):\n        self.f = file\n    def write(self, what):\n        if self.f is not None:\n            try:\n                self.f.write(what.replace(\"\\n\", \"\\r\\n\"))\n            except OSError:\n                pass\n        tee_f.write(what)",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "get_root_hkey",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def get_root_hkey():\n    try:\n        winreg.OpenKey(\n            winreg.HKEY_LOCAL_MACHINE, root_key_name, 0, winreg.KEY_CREATE_SUB_KEY\n        )\n        return winreg.HKEY_LOCAL_MACHINE\n    except OSError:\n        # Either not exist, or no permissions to create subkey means\n        # must be HKCU\n        return winreg.HKEY_CURRENT_USER",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "create_shortcut",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def create_shortcut(\n    path, description, filename, arguments=\"\", workdir=\"\", iconpath=\"\", iconindex=0\n):\n    import pythoncom\n    from win32com.shell import shell\n    ilink = pythoncom.CoCreateInstance(\n        shell.CLSID_ShellLink,\n        None,\n        pythoncom.CLSCTX_INPROC_SERVER,\n        shell.IID_IShellLink,",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "get_special_folder_path",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def get_special_folder_path(path_name):\n    from win32com.shell import shell, shellcon\n    for maybe in \"\"\"\n        CSIDL_COMMON_STARTMENU CSIDL_STARTMENU CSIDL_COMMON_APPDATA\n        CSIDL_LOCAL_APPDATA CSIDL_APPDATA CSIDL_COMMON_DESKTOPDIRECTORY\n        CSIDL_DESKTOPDIRECTORY CSIDL_COMMON_STARTUP CSIDL_STARTUP\n        CSIDL_COMMON_PROGRAMS CSIDL_PROGRAMS CSIDL_PROGRAM_FILES_COMMON\n        CSIDL_PROGRAM_FILES CSIDL_FONTS\"\"\".split():\n        if maybe == path_name:\n            csidl = getattr(shellcon, maybe)",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "CopyTo",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def CopyTo(desc, src, dest):\n    import win32api\n    import win32con\n    while 1:\n        try:\n            win32api.CopyFile(src, dest, 0)\n            return\n        except win32api.error as details:\n            if details.winerror == 5:  # access denied - user not admin.\n                raise",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "LoadSystemModule",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def LoadSystemModule(lib_dir, modname):\n    # See if this is a debug build.\n    import importlib.machinery\n    import importlib.util\n    suffix = \"_d\" if \"_d.pyd\" in importlib.machinery.EXTENSION_SUFFIXES else \"\"\n    filename = \"%s%d%d%s.dll\" % (\n        modname,\n        sys.version_info.major,\n        sys.version_info.minor,\n        suffix,",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "SetPyKeyVal",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def SetPyKeyVal(key_name, value_name, value):\n    root_hkey = get_root_hkey()\n    root_key = winreg.OpenKey(root_hkey, root_key_name)\n    try:\n        my_key = winreg.CreateKey(root_key, key_name)\n        try:\n            winreg.SetValueEx(my_key, value_name, 0, winreg.REG_SZ, value)\n            if verbose:\n                print(f\"-> {root_key_name}\\\\{key_name}[{value_name}]={value!r}\")\n        finally:",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "UnsetPyKeyVal",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def UnsetPyKeyVal(key_name, value_name, delete_key=False):\n    root_hkey = get_root_hkey()\n    root_key = winreg.OpenKey(root_hkey, root_key_name)\n    try:\n        my_key = winreg.OpenKey(root_key, key_name, 0, winreg.KEY_SET_VALUE)\n        try:\n            winreg.DeleteValue(my_key, value_name)\n            if verbose:\n                print(f\"-> DELETE {root_key_name}\\\\{key_name}[{value_name}]\")\n        finally:",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "RegisterCOMObjects",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def RegisterCOMObjects(register=True):\n    import win32com.server.register\n    if register:\n        func = win32com.server.register.RegisterClasses\n    else:\n        func = win32com.server.register.UnregisterClasses\n    flags = {}\n    if not verbose:\n        flags[\"quiet\"] = 1\n    for module, klass_name in com_modules:",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "RegisterHelpFile",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def RegisterHelpFile(register=True, lib_dir=None):\n    if lib_dir is None:\n        lib_dir = sysconfig.get_paths()[\"platlib\"]\n    if register:\n        # Register the .chm help file.\n        chm_file = os.path.join(lib_dir, \"PyWin32.chm\")\n        if os.path.isfile(chm_file):\n            # This isn't recursive, so if 'Help' doesn't exist, we croak\n            SetPyKeyVal(\"Help\", None, None)\n            SetPyKeyVal(\"Help\\\\Pythonwin Reference\", None, chm_file)",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "RegisterPythonwin",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def RegisterPythonwin(register=True, lib_dir=None):\n    \"\"\"Add (or remove) Pythonwin to context menu for python scripts.\n    ??? Should probably also add Edit command for pys files also.\n    Also need to remove these keys on uninstall, but there's no function\n    to add registry entries to uninstall log ???\n    \"\"\"\n    import os\n    if lib_dir is None:\n        lib_dir = sysconfig.get_paths()[\"platlib\"]\n    classes_root = get_root_hkey()",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "get_shortcuts_folder",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def get_shortcuts_folder():\n    if get_root_hkey() == winreg.HKEY_LOCAL_MACHINE:\n        try:\n            fldr = get_special_folder_path(\"CSIDL_COMMON_PROGRAMS\")\n        except OSError:\n            # No CSIDL_COMMON_PROGRAMS on this platform\n            fldr = get_special_folder_path(\"CSIDL_PROGRAMS\")\n    else:\n        # non-admin install - always goes in this user's start menu.\n        fldr = get_special_folder_path(\"CSIDL_PROGRAMS\")",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "get_system_dir",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def get_system_dir():\n    import win32api  # we assume this exists.\n    try:\n        import pythoncom\n        import win32process\n        from win32com.shell import shell, shellcon\n        try:\n            if win32process.IsWow64Process():\n                return shell.SHGetSpecialFolderPath(0, shellcon.CSIDL_SYSTEMX86)\n            return shell.SHGetSpecialFolderPath(0, shellcon.CSIDL_SYSTEM)",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "fixup_dbi",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def fixup_dbi():\n    # We used to have a dbi.pyd with our .pyd files, but now have a .py file.\n    # If the user didn't uninstall, they will find the .pyd which will cause\n    # problems - so handle that.\n    import win32api\n    import win32con\n    pyd_name = os.path.join(os.path.dirname(win32api.__file__), \"dbi.pyd\")\n    pyd_d_name = os.path.join(os.path.dirname(win32api.__file__), \"dbi_d.pyd\")\n    py_name = os.path.join(os.path.dirname(win32con.__file__), \"dbi.py\")\n    for this_pyd in (pyd_name, pyd_d_name):",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "install",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def install(lib_dir):\n    import traceback\n    # The .pth file is now installed as a regular file.\n    # Create the .pth file in the site-packages dir, and use only relative paths\n    # We used to write a .pth directly to sys.prefix - clobber it.\n    if os.path.isfile(os.path.join(sys.prefix, \"pywin32.pth\")):\n        os.unlink(os.path.join(sys.prefix, \"pywin32.pth\"))\n    # The .pth may be new and therefore not loaded in this session.\n    # Setup the paths just in case.\n    for name in \"win32 win32\\\\lib Pythonwin\".split():",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "uninstall",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def uninstall(lib_dir):\n    # First ensure our system modules are loaded from pywin32_system, so\n    # we can remove the ones we copied...\n    LoadSystemModule(lib_dir, \"pywintypes\")\n    LoadSystemModule(lib_dir, \"pythoncom\")\n    try:\n        RegisterCOMObjects(False)\n    except Exception as why:\n        print(f\"Failed to unregister COM objects: {why}\")\n    try:",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "verify_destination",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def verify_destination(location: str) -> str:\n    location = os.path.abspath(location)\n    if not os.path.isdir(location):\n        raise argparse.ArgumentTypeError(\n            f'Path \"{location}\" is not an existing directory!'\n        )\n    return location\ndef main():\n    parser = argparse.ArgumentParser(\n        formatter_class=argparse.RawDescriptionHelpFormatter,",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
         "label": "main",
         "kind": 2,
-        "importPath": "main",
-        "description": "main",
-        "peekOfCode": "def main():\n    print(\"Hello from general-local-agent!\")\nif __name__ == \"__main__\":\n    main()",
-        "detail": "main",
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "def main():\n    parser = argparse.ArgumentParser(\n        formatter_class=argparse.RawDescriptionHelpFormatter,\n        description=\"\"\"A post-install script for the pywin32 extensions.\n    * Typical usage:\n    > python -m pywin32_postinstall -install\n    * or (shorter but you don't have control over which python environment is used)\n    > pywin32_postinstall -install\n    You need to execute this script, with a '-install' parameter,\n    to ensure the environment is setup correctly to install COM objects, services, etc.",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "tee_f",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "tee_f = open(\n    os.path.join(\n        tempfile.gettempdir(),  # Send output somewhere so it can be found if necessary...\n        \"pywin32_postinstall.log\",\n    ),\n    \"w\",\n)\nclass Tee:\n    def __init__(self, file):\n        self.f = file",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "sys.stderr",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "sys.stderr = Tee(sys.stderr)\nsys.stdout = Tee(sys.stdout)\ncom_modules = [\n    # module_name,                      class_names\n    (\"win32com.servers.interp\", \"Interpreter\"),\n    (\"win32com.servers.dictionary\", \"DictionaryPolicy\"),\n    (\"win32com.axscript.client.pyscript\", \"PyScript\"),\n]\n# Is this a 'silent' install - ie, avoid all dialogs.\n# Different than 'verbose'",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "sys.stdout",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "sys.stdout = Tee(sys.stdout)\ncom_modules = [\n    # module_name,                      class_names\n    (\"win32com.servers.interp\", \"Interpreter\"),\n    (\"win32com.servers.dictionary\", \"DictionaryPolicy\"),\n    (\"win32com.axscript.client.pyscript\", \"PyScript\"),\n]\n# Is this a 'silent' install - ie, avoid all dialogs.\n# Different than 'verbose'\nsilent = 0",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "com_modules",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "com_modules = [\n    # module_name,                      class_names\n    (\"win32com.servers.interp\", \"Interpreter\"),\n    (\"win32com.servers.dictionary\", \"DictionaryPolicy\"),\n    (\"win32com.axscript.client.pyscript\", \"PyScript\"),\n]\n# Is this a 'silent' install - ie, avoid all dialogs.\n# Different than 'verbose'\nsilent = 0\n# Verbosity of output messages.",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "silent",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "silent = 0\n# Verbosity of output messages.\nverbose = 1\nroot_key_name = \"Software\\\\Python\\\\PythonCore\\\\\" + sys.winver\ndef get_root_hkey():\n    try:\n        winreg.OpenKey(\n            winreg.HKEY_LOCAL_MACHINE, root_key_name, 0, winreg.KEY_CREATE_SUB_KEY\n        )\n        return winreg.HKEY_LOCAL_MACHINE",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "verbose",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "verbose = 1\nroot_key_name = \"Software\\\\Python\\\\PythonCore\\\\\" + sys.winver\ndef get_root_hkey():\n    try:\n        winreg.OpenKey(\n            winreg.HKEY_LOCAL_MACHINE, root_key_name, 0, winreg.KEY_CREATE_SUB_KEY\n        )\n        return winreg.HKEY_LOCAL_MACHINE\n    except OSError:\n        # Either not exist, or no permissions to create subkey means",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "root_key_name",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_postinstall",
+        "description": ".venv.Scripts.pywin32_postinstall",
+        "peekOfCode": "root_key_name = \"Software\\\\Python\\\\PythonCore\\\\\" + sys.winver\ndef get_root_hkey():\n    try:\n        winreg.OpenKey(\n            winreg.HKEY_LOCAL_MACHINE, root_key_name, 0, winreg.KEY_CREATE_SUB_KEY\n        )\n        return winreg.HKEY_LOCAL_MACHINE\n    except OSError:\n        # Either not exist, or no permissions to create subkey means\n        # must be HKCU",
+        "detail": ".venv.Scripts.pywin32_postinstall",
+        "documentation": {}
+    },
+    {
+        "label": "run_test",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_testall",
+        "description": ".venv.Scripts.pywin32_testall",
+        "peekOfCode": "def run_test(script, cmdline_extras):\n    dirname, scriptname = os.path.split(script)\n    # some tests prefer to be run from their directory.\n    cmd = [sys.executable, \"-u\", scriptname] + cmdline_extras\n    print(\"--- Running '%s' ---\" % script)\n    sys.stdout.flush()\n    result = subprocess.run(cmd, check=False, cwd=dirname)\n    print(f\"*** Test script '{script}' exited with {result.returncode}\")\n    sys.stdout.flush()\n    if result.returncode:",
+        "detail": ".venv.Scripts.pywin32_testall",
+        "documentation": {}
+    },
+    {
+        "label": "find_and_run",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_testall",
+        "description": ".venv.Scripts.pywin32_testall",
+        "peekOfCode": "def find_and_run(possible_locations, extras):\n    for maybe in possible_locations:\n        if os.path.isfile(maybe):\n            run_test(maybe, extras)\n            break\n    else:\n        raise RuntimeError(\n            \"Failed to locate a test script in one of %s\" % possible_locations\n        )\ndef main():",
+        "detail": ".venv.Scripts.pywin32_testall",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": ".venv.Scripts.pywin32_testall",
+        "description": ".venv.Scripts.pywin32_testall",
+        "peekOfCode": "def main():\n    import argparse\n    code_directories = [project_root] + site_packages\n    parser = argparse.ArgumentParser(\n        description=\"A script to trigger tests in all subprojects of PyWin32.\"\n    )\n    parser.add_argument(\n        \"-no-user-interaction\",\n        default=False,\n        action=\"store_true\",",
+        "detail": ".venv.Scripts.pywin32_testall",
+        "documentation": {}
+    },
+    {
+        "label": "project_root",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_testall",
+        "description": ".venv.Scripts.pywin32_testall",
+        "peekOfCode": "project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))\nsite_packages = [site.getusersitepackages()] + site.getsitepackages()\nfailures = []\n# Run a test using subprocess and wait for the result.\n# If we get an returncode != 0, we know that there was an error, but we don't\n# abort immediately - we run as many tests as we can.\ndef run_test(script, cmdline_extras):\n    dirname, scriptname = os.path.split(script)\n    # some tests prefer to be run from their directory.\n    cmd = [sys.executable, \"-u\", scriptname] + cmdline_extras",
+        "detail": ".venv.Scripts.pywin32_testall",
+        "documentation": {}
+    },
+    {
+        "label": "site_packages",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_testall",
+        "description": ".venv.Scripts.pywin32_testall",
+        "peekOfCode": "site_packages = [site.getusersitepackages()] + site.getsitepackages()\nfailures = []\n# Run a test using subprocess and wait for the result.\n# If we get an returncode != 0, we know that there was an error, but we don't\n# abort immediately - we run as many tests as we can.\ndef run_test(script, cmdline_extras):\n    dirname, scriptname = os.path.split(script)\n    # some tests prefer to be run from their directory.\n    cmd = [sys.executable, \"-u\", scriptname] + cmdline_extras\n    print(\"--- Running '%s' ---\" % script)",
+        "detail": ".venv.Scripts.pywin32_testall",
+        "documentation": {}
+    },
+    {
+        "label": "failures",
+        "kind": 5,
+        "importPath": ".venv.Scripts.pywin32_testall",
+        "description": ".venv.Scripts.pywin32_testall",
+        "peekOfCode": "failures = []\n# Run a test using subprocess and wait for the result.\n# If we get an returncode != 0, we know that there was an error, but we don't\n# abort immediately - we run as many tests as we can.\ndef run_test(script, cmdline_extras):\n    dirname, scriptname = os.path.split(script)\n    # some tests prefer to be run from their directory.\n    cmd = [sys.executable, \"-u\", scriptname] + cmdline_extras\n    print(\"--- Running '%s' ---\" % script)\n    sys.stdout.flush()",
+        "detail": ".venv.Scripts.pywin32_testall",
+        "documentation": {}
+    },
+    {
+        "label": "TestBasicConnections",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestBasicConnections(unittest.TestCase):\n    def test_basic_connection(self):\n        \"Check that a standard connection works\"\n        self.assert_(wmi.WMI())\n    def test_remote_connection(self):\n        \"Check that a remote connection works, if specified\"\n        if \"machine\" in settings:\n            self.assert_(wmi.WMI(settings['machine']))\n        else:\n            warnings.warn(\"Skipping test_remote_connection\")",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestThreadedConnection",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestThreadedConnection(unittest.TestCase):\n    def test_initialised_thread(self):\n        \"\"\"A WMI connection in a thread which has been initialised for COM\n        should succeed.\n        \"\"\"\n        def f(q):\n            pythoncom.CoInitialize()\n            try:\n                try:\n                    wmi.WMI()",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestMoniker",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestMoniker(unittest.TestCase):\n    def test_moniker(self):\n        \"\"\"Look at all possible options for moniker construction and pass\n        them through to a WMI connector\n        \"\"\"\n        for computer in COMPUTERS:\n            if computer in (None, \".\"):\n                local_authorities = [None]\n            else:\n                local_authorities = AUTHORITIES",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestFunctions",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestFunctions(unittest.TestCase):\n    times = [\n       ((2000, 1, 1), \"20000101******.******+***\"),\n       ((2000, 1, 1, 10, 0, 0), \"20000101100000.******+***\"),\n       ((2000, 1, 1, 10, 0, 0, 100), \"20000101100000.000100+***\"),\n       ((2000, 1, 1, 10, 0, 0, 100, \"GMT\"), \"20000101100000.000100+GMT\")\n    ]\n    def test_signed_to_unsigned(self):\n        tests = [\n           (0, 0),",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestWMI",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestWMI(unittest.TestCase):\n    def setUp(self):\n        self.connection = wmi.WMI(namespace=\"root/cimv2\", find_classes=False)\n        self.logical_disks = set(self.connection.Win32_LogicalDisk())\nclass TestNamespace(TestWMI):\n    def test_subclasses_of_simple(self):\n        self.assert_(\"Win32_ComputerSystem\" in self.connection.subclasses_of())\n    def test_subclasses_of_subtree(self):\n        self.assert_(\"Win32_Desktop\" in self.connection.subclasses_of(\"CIM_Setting\"))\n    def test_subclasses_of_pattern(self):",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestNamespace",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestNamespace(TestWMI):\n    def test_subclasses_of_simple(self):\n        self.assert_(\"Win32_ComputerSystem\" in self.connection.subclasses_of())\n    def test_subclasses_of_subtree(self):\n        self.assert_(\"Win32_Desktop\" in self.connection.subclasses_of(\"CIM_Setting\"))\n    def test_subclasses_of_pattern(self):\n        self.assert_(set([\"Win32_LogicalDisk\", \"Win32_MappedLogicalDisk\"]) <= set(self.connection.subclasses_of(\"CIM_LogicalDevice\", \"Win32_.*Disk\")))\n    def test_instances(self):\n        self.assertEquals(self.logical_disks, set(self.connection.instances(\"Win32_LogicalDisk\")))\n    def test_new(self):",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestClass",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestClass(TestWMI):\n    def test_class_from_namespace(self):\n        self.assert_(self.connection.Win32_ComputerSystem._namespace is self.connection)\n    def test_class_without_namespace(self):\n        wmi_class = wmi.GetObject(\"winmgmts:Win32_ComputerSystem\")\n        self.assert_(wmi._wmi_class(None, wmi_class)._namespace)\n    def test_query(self):\n        self.assertEquals(\n            set(self.connection.Win32_ComputerSystem.query()),\n            set(self.connection.query(\"SELECT * FROM Win32_ComputerSystem\"))",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestWatcher",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestWatcher(TestWMI):\n    def new_letter(self):\n        return \\\n            set(\"%s:\" % chr(i) for i in range(ord('A'), 1 + ord('Z'))).\\\n            difference(d.DeviceID for d in self.connection.Win32_LogicalDisk()).\\\n            pop()\n    @staticmethod\n    def create(new_letter):\n        #~ print(\"about to create drive with letter\", new_letter)\n        here = os.path.dirname(os.path.abspath(__file__))",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestMethods",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestMethods(TestWMI):\n    def test_exists(self):\n        \"Check that a well-known method is available by attribute\"\n        self.assert_(self.connection.Win32_Process.Create)\n    def test_params(self):\n        \"Check that the names and arrayness of params are picked up when not arrays\"\n        self.assertEquals(\n            [(n, False) for n in [\"CommandLine\", \"CurrentDirectory\", \"ProcessStartupInformation\"]],\n            self.connection.Win32_Process.Create.in_parameter_names\n        )",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestProperties",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestProperties(TestWMI):\n    def test_access(self):\n        \"Check that all properties are available as attributes\"\n        for d in self.logical_disks:\n            break\n        for p in d.ole_object.Properties_:\n            self.assertEqual(p.Value, getattr(d, p.Name))\n    def test_attribute_passthrough(self):\n        \"Check that unknown attributes are passed through to the underlying object\"\n        for d in self.logical_disks:",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestInstances",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestInstances(TestWMI):\n    def test_hashable(self):\n        \"Ensure instances are hashable so can be used in a set/dict\"\n        self.assert_(dict.fromkeys(self.logical_disks))\n    def test_equalable(self):\n        \"Ensure instances compare equal\"\n        self.assertEqual(self.logical_disks, self.logical_disks)\n    def test_not_equal_to_anything_else(self):\n        \"Ensure WMI instances are not equal to non-WMI instances\"\n        for d in self.logical_disks:",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestInstanceCreation",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestInstanceCreation(TestWMI):\n    def test_create_instance(self):\n        self.assert_(isinstance(self.connection.Win32_ProcessStartup.new(ShowWindow=2), wmi._wmi_object))\nclass TestAssociations(TestWMI):\n    def test_all_properties_available(self):\n        #\n        # An association can contain not only the associated\n        # classes but also extra information as well. Ensure\n        # that both types of data are correctly handled.\n        #",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "TestAssociations",
+        "kind": 6,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "class TestAssociations(TestWMI):\n    def test_all_properties_available(self):\n        #\n        # An association can contain not only the associated\n        # classes but also extra information as well. Ensure\n        # that both types of data are correctly handled.\n        #\n        for q in self.connection.Win32_DiskQuota():\n            for p in q.properties:\n                try:",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "ini",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "ini = ConfigParser.SafeConfigParser()\nini.read([\"wmitest.master.ini\", \"wmitest.ini\"])\nsettings = {}\nif ini.has_section(\"settings\"):\n    settings.update(ini.items(\"settings\"))\nexcludes = [i.strip() for i in settings.get(\"excludes\", \"\").split(\",\")]\nCOMPUTERS = [None, \".\"]\nif \"machine\" in settings:\n    COMPUTERS.append(settings['machine'])\nIMPERSONATION_LEVELS = [None, \"identify\", \"impersonate\", \"delegate\"]",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "settings = {}\nif ini.has_section(\"settings\"):\n    settings.update(ini.items(\"settings\"))\nexcludes = [i.strip() for i in settings.get(\"excludes\", \"\").split(\",\")]\nCOMPUTERS = [None, \".\"]\nif \"machine\" in settings:\n    COMPUTERS.append(settings['machine'])\nIMPERSONATION_LEVELS = [None, \"identify\", \"impersonate\", \"delegate\"]\nAUTHENTICATION_LEVELS = [None, \"default\", \"none\", \"connect\", \"call\", \"pkt\", \"pktintegrity\", \"pktprivacy\"]\nAUTHORITIES = [None]",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "excludes",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "excludes = [i.strip() for i in settings.get(\"excludes\", \"\").split(\",\")]\nCOMPUTERS = [None, \".\"]\nif \"machine\" in settings:\n    COMPUTERS.append(settings['machine'])\nIMPERSONATION_LEVELS = [None, \"identify\", \"impersonate\", \"delegate\"]\nAUTHENTICATION_LEVELS = [None, \"default\", \"none\", \"connect\", \"call\", \"pkt\", \"pktintegrity\", \"pktprivacy\"]\nAUTHORITIES = [None]\nif set([\"domain\", \"machine\"]) <= set(settings):\n    #~ AUTHORITIES.append(\"kerberos:%s\" % settings['domain'])\n    AUTHORITIES.append(\"ntlmdomain:%s\" % settings['domain'])",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "COMPUTERS",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "COMPUTERS = [None, \".\"]\nif \"machine\" in settings:\n    COMPUTERS.append(settings['machine'])\nIMPERSONATION_LEVELS = [None, \"identify\", \"impersonate\", \"delegate\"]\nAUTHENTICATION_LEVELS = [None, \"default\", \"none\", \"connect\", \"call\", \"pkt\", \"pktintegrity\", \"pktprivacy\"]\nAUTHORITIES = [None]\nif set([\"domain\", \"machine\"]) <= set(settings):\n    #~ AUTHORITIES.append(\"kerberos:%s\" % settings['domain'])\n    AUTHORITIES.append(\"ntlmdomain:%s\" % settings['domain'])\nPRIVILEGES = [None, ['security', '!shutdown']]",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "IMPERSONATION_LEVELS",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "IMPERSONATION_LEVELS = [None, \"identify\", \"impersonate\", \"delegate\"]\nAUTHENTICATION_LEVELS = [None, \"default\", \"none\", \"connect\", \"call\", \"pkt\", \"pktintegrity\", \"pktprivacy\"]\nAUTHORITIES = [None]\nif set([\"domain\", \"machine\"]) <= set(settings):\n    #~ AUTHORITIES.append(\"kerberos:%s\" % settings['domain'])\n    AUTHORITIES.append(\"ntlmdomain:%s\" % settings['domain'])\nPRIVILEGES = [None, ['security', '!shutdown']]\nNAMESPACES = [None, \"root/cimv2\", \"default\"]\nclass TestBasicConnections(unittest.TestCase):\n    def test_basic_connection(self):",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "AUTHENTICATION_LEVELS",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "AUTHENTICATION_LEVELS = [None, \"default\", \"none\", \"connect\", \"call\", \"pkt\", \"pktintegrity\", \"pktprivacy\"]\nAUTHORITIES = [None]\nif set([\"domain\", \"machine\"]) <= set(settings):\n    #~ AUTHORITIES.append(\"kerberos:%s\" % settings['domain'])\n    AUTHORITIES.append(\"ntlmdomain:%s\" % settings['domain'])\nPRIVILEGES = [None, ['security', '!shutdown']]\nNAMESPACES = [None, \"root/cimv2\", \"default\"]\nclass TestBasicConnections(unittest.TestCase):\n    def test_basic_connection(self):\n        \"Check that a standard connection works\"",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "AUTHORITIES",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "AUTHORITIES = [None]\nif set([\"domain\", \"machine\"]) <= set(settings):\n    #~ AUTHORITIES.append(\"kerberos:%s\" % settings['domain'])\n    AUTHORITIES.append(\"ntlmdomain:%s\" % settings['domain'])\nPRIVILEGES = [None, ['security', '!shutdown']]\nNAMESPACES = [None, \"root/cimv2\", \"default\"]\nclass TestBasicConnections(unittest.TestCase):\n    def test_basic_connection(self):\n        \"Check that a standard connection works\"\n        self.assert_(wmi.WMI())",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "PRIVILEGES",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "PRIVILEGES = [None, ['security', '!shutdown']]\nNAMESPACES = [None, \"root/cimv2\", \"default\"]\nclass TestBasicConnections(unittest.TestCase):\n    def test_basic_connection(self):\n        \"Check that a standard connection works\"\n        self.assert_(wmi.WMI())\n    def test_remote_connection(self):\n        \"Check that a remote connection works, if specified\"\n        if \"machine\" in settings:\n            self.assert_(wmi.WMI(settings['machine']))",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "NAMESPACES",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmitest",
+        "description": ".venv.Scripts.wmitest",
+        "peekOfCode": "NAMESPACES = [None, \"root/cimv2\", \"default\"]\nclass TestBasicConnections(unittest.TestCase):\n    def test_basic_connection(self):\n        \"Check that a standard connection works\"\n        self.assert_(wmi.WMI())\n    def test_remote_connection(self):\n        \"Check that a remote connection works, if specified\"\n        if \"machine\" in settings:\n            self.assert_(wmi.WMI(settings['machine']))\n        else:",
+        "detail": ".venv.Scripts.wmitest",
+        "documentation": {}
+    },
+    {
+        "label": "link",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def link(text, computer, namespace=None, wmi_class=None):\n    link = '<a href=\"/' + quote(computer)\n    if namespace:\n        link += \"/\" + quote(namespace)\n    if wmi_class:\n        link += \"/\" + quote(wmi_class)\n    return link + '\">' + escape(text) + '</a>'\ndef start_doc(title):\n    doc[:] = []\n    doc.append(\"\"\"",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "start_doc",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def start_doc(title):\n    doc[:] = []\n    doc.append(\"\"\"\n    <html>\n    <head>\n    <title>%(title)s</title>\n    <style>\n    body {font-family : Verdana, sans-serif; font-size : 84%%; margin : 3em;}\n    table.items {padding-left : 30px;}\n    li, td {font-family : \"Courier New\", monospace;}",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "finish_doc",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def finish_doc():\n    doc.append(\"\"\"\n    </body>\n    </html>\n    \"\"\" % locals())\ndef doc_table(items, n_cols=3, callback=None):\n    n_rows, n_spare_cols = divmod(len(items), n_cols)\n    doc.append('<table cellspacing=0 class=\"items\">')\n    for n_row in range(n_rows):\n        doc.append(\"<tr>\")",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "doc_table",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def doc_table(items, n_cols=3, callback=None):\n    n_rows, n_spare_cols = divmod(len(items), n_cols)\n    doc.append('<table cellspacing=0 class=\"items\">')\n    for n_row in range(n_rows):\n        doc.append(\"<tr>\")\n        for n_col in range(n_cols):\n            item = items[n_cols * n_col + n_row]\n            if callback:\n                item = callback(item)\n            doc.append(\"<td><li>%s</li></td>\" % item)",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "doc_breadcrumbs",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def doc_breadcrumbs(computer, namespace, wmi_class=None):\n    doc.append('<p class=\"breadcrumbs\">')\n    doc.append('%s &rarr; %s' % (link(computer, computer), link(namespace, computer, namespace)))\n    if wmi_class:\n        doc.append(' &rarr; %s' % (link(wmi_class, computer, namespace, wmi_class)))\n    doc.append('</p>')\ndef doc_wmi_class(computer, namespace, wmi_class, wmi_connection):\n    start_doc(\"WMI: Class %(wmi_class)s in namespace %(namespace)s on %(computer)s\" % locals())\n    doc_breadcrumbs(computer, namespace, wmi_class)\n    doc.append(\"<h2>%(wmi_class)s</h2>\" % locals())",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "doc_wmi_class",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def doc_wmi_class(computer, namespace, wmi_class, wmi_connection):\n    start_doc(\"WMI: Class %(wmi_class)s in namespace %(namespace)s on %(computer)s\" % locals())\n    doc_breadcrumbs(computer, namespace, wmi_class)\n    doc.append(\"<h2>%(wmi_class)s</h2>\" % locals())\n    klass = getattr(wmi_connection, wmi_class)\n    def property_callback(property_name):\n        property = klass.wmi_property(property_name)\n        mapping = property.qualifiers.get(\"MappingStrings\")\n        if mapping is None:\n            return property_name",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "doc_namespace",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def doc_namespace(computer, namespace, wmi_connection):\n    start_doc(\"WMI: Namespace %(namespace)s on %(computer)s\" % locals())\n    doc_breadcrumbs(computer, namespace)\n    namespaces = namespace.split(\"\\\\\")\n    namespace_links = []\n    for i, n in enumerate(namespaces):\n        namespace_links.append(link(n, computer, \"\\\\\".join(namespaces[:i+1])))\n    doc.append(\"<h2>%s</h2>\" % \"\\\\\".join(namespace_links))\n    doc.append(\"<hr>\")\n    subnamespaces = sorted(wmi_connection.__NAMESPACE())",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "handle_namespace",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def handle_namespace(environ, computer, namespace):\n    if not namespace:\n        wmi_connection = wmi.WMI(computer, namespace=\"root/cimv2\")\n        for setting in wmi_connection.Win32_WMISetting():\n            namespace=setting.ASPScriptDefaultNamespace\n            break\n    wmi_connection = wmi.WMI(computer, namespace=namespace, find_classes=True)\n    wmi_class = shift_path_info(environ)\n    if wmi_class:\n        doc_wmi_class(computer, namespace, wmi_class, wmi_connection)",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "handle_computer",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def handle_computer(environ, computer):\n    handle_namespace(environ, computer, shift_path_info(environ))\ndef app(environ, start_response):\n    computer = shift_path_info(environ)\n    if computer == \"favicon.ico\":\n        start_response(\"404 Not Found\", [(\"Content-Type\", \"text/plain\")])\n        return []\n    elif computer:\n        start_response(\"200 OK\", [(\"Content-Type\", \"text/html; charset=utf-8\")])\n        handle_computer(environ, computer)",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def app(environ, start_response):\n    computer = shift_path_info(environ)\n    if computer == \"favicon.ico\":\n        start_response(\"404 Not Found\", [(\"Content-Type\", \"text/plain\")])\n        return []\n    elif computer:\n        start_response(\"200 OK\", [(\"Content-Type\", \"text/html; charset=utf-8\")])\n        handle_computer(environ, computer)\n        return(unicode(d).encode(\"utf8\") + unicode(\"\\n\").encode(\"utf8\") for d in doc)\n    else:",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "run_browser",
+        "kind": 2,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "def run_browser():\n    import os\n    os.startfile(\"http://localhost:%d\" % PORT)\nif __name__ == '__main__':\n    threading.Timer(3.0, run_browser).start()\n    httpd = make_server('', PORT, app)\n    try:\n        httpd.serve_forever()\n    except KeyboardInterrupt:\n        print(\"Shutting down gracefully...\")",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "doc",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "doc = []\ndef link(text, computer, namespace=None, wmi_class=None):\n    link = '<a href=\"/' + quote(computer)\n    if namespace:\n        link += \"/\" + quote(namespace)\n    if wmi_class:\n        link += \"/\" + quote(wmi_class)\n    return link + '\">' + escape(text) + '</a>'\ndef start_doc(title):\n    doc[:] = []",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "PORT",
+        "kind": 5,
+        "importPath": ".venv.Scripts.wmiweb",
+        "description": ".venv.Scripts.wmiweb",
+        "peekOfCode": "PORT = 8010\ndef run_browser():\n    import os\n    os.startfile(\"http://localhost:%d\" % PORT)\nif __name__ == '__main__':\n    threading.Timer(3.0, run_browser).start()\n    httpd = make_server('', PORT, app)\n    try:\n        httpd.serve_forever()\n    except KeyboardInterrupt:",
+        "detail": ".venv.Scripts.wmiweb",
+        "documentation": {}
+    },
+    {
+        "label": "agent_turn",
+        "kind": 2,
+        "importPath": "agent.gemini_client",
+        "description": "agent.gemini_client",
+        "peekOfCode": "def agent_turn(user_msg: str, history: list, session_state: dict):\n    if not session_state or session_state.get(\"session_id\") is None:\n        session_state = {\n            \"session_id\": str(uuid.uuid4()),\n        }\n    # Conversation context for planner\n    convo_history = history + [{\"role\": \"user\", \"content\": user_msg}]\n    base_dir = os.getenv(\n        \"AGENT_BASE_DIR\"\n    )",
+        "detail": "agent.gemini_client",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "agent.gemini_client",
+        "description": "agent.gemini_client",
+        "peekOfCode": "def main():\n    demo_graph = build_demo_graph()\n    print(\"AGENT FLOW GRAPH (LangGraph ASCII) \")\n    print(demo_graph.get_graph().draw_ascii())\n    with gr.Blocks() as demo:\n        gr.Markdown(\"# 🖥️ Local OS Agent\")\n        chatbot = gr.Chatbot(\n            label=\"Local Agent\",\n            height=400,\n            type=\"messages\"  ",
+        "detail": "agent.gemini_client",
+        "documentation": {}
+    },
+    {
+        "label": "build_agent_graph",
+        "kind": 2,
+        "importPath": "agent.graph",
+        "description": "agent.graph",
+        "peekOfCode": "def build_agent_graph() -> StateGraph:\n    builder = StateGraph(AgentState)\n    builder.add_node(\"plan\", plan_node)\n    builder.add_node(\"execute\", execute_node)\n    builder.add_node(\"verify\", verify_node)\n    builder.add_node(\"route_after_verify\", route_after_verify_node)\n    builder.add_node(\"repair_subtask\", repair_subtask_node)\n    builder.add_node(\"finalize\", finalize_node)\n    builder.set_entry_point(\"plan\")\n    builder.add_edge(\"plan\", \"execute\")",
+        "detail": "agent.graph",
+        "documentation": {}
+    },
+    {
+        "label": "build_demo_graph",
+        "kind": 2,
+        "importPath": "agent.graph",
+        "description": "agent.graph",
+        "peekOfCode": "def build_demo_graph() -> StateGraph:\n    builder = StateGraph(AgentState)\n    builder.add_node(\"plan\", lambda s: s)\n    builder.add_node(\"execute\", lambda s: s)\n    builder.add_node(\"verify\", lambda s: s)\n    builder.add_node(\"route_after_verify\", lambda s: s)\n    builder.add_node(\"repair_subtask\", lambda s: s)\n    builder.add_node(\"finalize\", lambda s: s)\n    builder.set_entry_point(\"plan\")\n    builder.add_edge(\"plan\", \"execute\")",
+        "detail": "agent.graph",
+        "documentation": {}
+    },
+    {
+        "label": "ask_gemini_raw",
+        "kind": 2,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "def ask_gemini_raw(prompt: str) -> str:\n    try:\n        client = _get_client()\n        resp = client.models.generate_content(\n            model=\"gemini-2.5-flash\",\n            contents=prompt,\n        )\n        try:\n            return resp.text\n        except Exception:",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "plan_tasks",
+        "kind": 2,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "def plan_tasks(\n    chat_history: List[Dict[str, str]],\n    goal: str,\n    base_dir: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Ask Gemini to break the user goal into ordered subtasks.\n    Expected ONLY valid JSON:\n    {\n      \"global_success_criteria\": \"...\",",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "assess_success",
+        "kind": 2,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "def assess_success(\n    success_criteria: str,\n    stdout: str,\n    stderr: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Ask Gemini if success_criteria is satisfied.\n    Respond ONLY JSON:\n    {\n      \"success\": true/false,",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "repair_command",
+        "kind": 2,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "def repair_command(\n    base_dir: str,\n    subtask_desc: str,\n    success_criteria: str,\n    last_command: str,\n    language: str,\n    stdout: str,\n    stderr: str,\n) -> Dict[str, Any]:\n    \"\"\"",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "summarize_final",
+        "kind": 2,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "def summarize_final(\n    goal: str,\n    base_dir: str,\n    global_success: str,\n    subtask_results: List[Dict[str, Any]]\n) -> str:\n    \"\"\"\n    Ask Gemini to generate the final answer for the user, describing what\n    happened, what paths we found, results from CSV previews, system stats, etc.\n    \"\"\"",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "AGENT_BASE_DIR",
+        "kind": 5,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nUser wants to achieve a goal using this computer.\nYou will output ONLY VALID JSON (no commentary outside JSON) with this shape:\n{{\n  \"global_success_criteria\": \"string explaining when the WHOLE goal is done\",\n  \"subtasks\": [\n    {{\n      \"id\": 1,\n      \"description\": \"natural language meaning of the subtask\",\n      \"success_criteria\": \"stdout/stderr condition that proves success\",",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "AGENT_BASE_DIR",
+        "kind": 5,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nSUBTASK DESCRIPTION:\n{subtask_desc}\nSUBTASK SUCCESS CRITERIA:\n{success_criteria}\nWe attempted this ({language}):\n{last_command}\nResult:\nSTDOUT:\n{stdout[:2000]}",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "AGENT_BASE_DIR",
+        "kind": 5,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nUSER GOAL:\n{goal}\nGLOBAL SUCCESS CRITERIA FOR WHOLE GOAL:\n{global_success}\nSUBTASK RESULTS:\n{results_json_str}\nWrite a final message for the user:\n- Summarize what we actually did on the machine.\n- Mention important file paths found.",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
+        "label": "plan_node",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def plan_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Call Gemini planner to produce subtasks + success criteria.\n    Initialize cursor/attempt/etc.\n    Also open a 'plan_tasks' child span in LangSmith.\n    \"\"\"\n    parent_id = state.get(\"parent_run_id\")\n    plan_span = ls_start_run(\n        name=\"plan_tasks\",\n        run_type=\"llm\",",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "execute_node",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def execute_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Execute the current subtask command/script.\n    Increment attempt.\n    Trace child span 'execute'.\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0) + 1  \n    if cursor < 0 or cursor >= len(subtasks):",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "verify_node",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def verify_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Ask Gemini if success criteria was met.\n    If yes, append a success entry into results_for_final.\n    Trace child span 'verify'.\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    results = state.get(\"results_for_final\", [])",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "route_after_verify_node",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def route_after_verify_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Decide next route:\n    - success -> next subtask or finalize\n    - fail but retries left -> repair_subtask\n    - fail and retries done -> record failure and move on or finalize\n    We set state[\"route\"] to \"execute\", \"repair_subtask\", or \"finalize\".\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "route_router",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def route_router(state: AgentState) -> str:\n    \"\"\"\n    Tiny router fn that LangGraph calls. Must return\n    'execute', 'repair_subtask', or 'finalize'.\n    \"\"\"\n    return state.get(\"route\", \"finalize\")\ndef repair_subtask_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Ask Gemini to fix the command for current subtask.\n    Update that subtask's language/command.",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "repair_subtask_node",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def repair_subtask_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Ask Gemini to fix the command for current subtask.\n    Update that subtask's language/command.\n    Trace 'repair_subtask' span.\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    if cursor < 0 or cursor >= len(subtasks):",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "finalize_node",
+        "kind": 2,
+        "importPath": "agent.nodes",
+        "description": "agent.nodes",
+        "peekOfCode": "def finalize_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Summarize final result for the user.\n    Trace 'finalize' span.\n    \"\"\"\n    fin_span = ls_start_run(\n        name=\"finalize\",\n        run_type=\"llm\",\n        inputs={\n            \"goal\": state.get(\"goal\", \"\"),",
+        "detail": "agent.nodes",
+        "documentation": {}
+    },
+    {
+        "label": "run_agent_once",
+        "kind": 2,
+        "importPath": "agent.runtime",
+        "description": "agent.runtime",
+        "peekOfCode": "def run_agent_once(\n    goal: str,\n    chat_history: List[Dict[str, str]],\n    base_dir: str,\n    max_retries: int = 3,\n) -> Tuple[str, str]:\n    parent_span = ls_start_run(\n        name=\"LangGraph\",\n        run_type=\"chain\",\n        inputs={",
+        "detail": "agent.runtime",
+        "documentation": {}
+    },
+    {
+        "label": "AgentState",
+        "kind": 6,
+        "importPath": "agent.state",
+        "description": "agent.state",
+        "peekOfCode": "class AgentState(TypedDict, total=False):\n    # context\n    goal: str\n    base_dir: str\n    chat_history: List[Dict[str, str]]\n    # Plan info\n    plan: Dict[str, Any]\n    subtasks: List[Dict[str, Any]]\n    global_success_criteria: str\n    # Progress",
+        "detail": "agent.state",
+        "documentation": {}
+    },
+    {
+        "label": "ls_start_run",
+        "kind": 2,
+        "importPath": "agent.state",
+        "description": "agent.state",
+        "peekOfCode": "def ls_start_run(name: str, run_type: str, inputs: Dict[str, Any], parent_run_id=None):\n    handle = {\"client\": None, \"run_id\": None}\n    if LangsmithClient is None:\n        return handle\n    try:\n        client = LangsmithClient()\n        run = client.create_run(\n            name=name,\n            run_type=run_type,\n            inputs=inputs,",
+        "detail": "agent.state",
+        "documentation": {}
+    },
+    {
+        "label": "ls_end_run",
+        "kind": 2,
+        "importPath": "agent.state",
+        "description": "agent.state",
+        "peekOfCode": "def ls_end_run(handle: Dict[str, Any], outputs: Dict[str, Any], error: str = None):\n    client = handle.get(\"client\")\n    run_id = handle.get(\"run_id\")\n    if not client or not run_id:\n        return\n    try:\n        client.update_run(\n            run_id=run_id,\n            outputs=outputs,\n            error=error,",
+        "detail": "agent.state",
+        "documentation": {}
+    },
+    {
+        "label": "get_system_info",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def get_system_info() -> Dict[str, Any]:\n    \"\"\"Get comprehensive system information.\"\"\"\n    try:\n        cpu_percent = psutil.cpu_percent(interval=1)\n        memory = psutil.virtual_memory()\n        disk = psutil.disk_usage('/')\n        info = {\n            \"cpu_usage\": f\"{cpu_percent}%\",\n            \"ram_total\": _human_size(memory.total),\n            \"ram_available\": _human_size(memory.available),",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "get_running_processes",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def get_running_processes() -> Dict[str, Any]:\n    \"\"\"Get list of running processes with CPU and memory usage.\"\"\"\n    try:\n        process_list = []\n        for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):\n            try:\n                pinfo = proc.info\n                process_list.append({\n                    \"pid\": pinfo[\"pid\"],\n                    \"name\": pinfo[\"name\"],",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_image",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def analyze_image(image_path: str) -> Dict[str, Any]:\n    \"\"\"Analyze an image file and return its properties.\"\"\"\n    if not Image:\n        return {\n            \"ok\": False,\n            \"stdout\": \"\",\n            \"stderr\": \"Pillow library not installed. Install with: pip install Pillow\"\n        }\n    try:\n        with Image.open(image_path) as img:",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "summarize_pdf",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def summarize_pdf(pdf_path: str, max_pages: int = 3) -> Dict[str, Any]:\n    \"\"\"Extract and summarize the first few pages of a PDF.\"\"\"\n    if not PyPDF2:\n        return {\n            \"ok\": False,\n            \"stdout\": \"\",\n            \"stderr\": \"PyPDF2 library not installed. Install with: pip install PyPDF2\"\n        }\n    try:\n        with open(pdf_path, 'rb') as file:",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_csv",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def analyze_csv(csv_path: str) -> Dict[str, Any]:\n    \"\"\"Provide quick statistics about a CSV file.\"\"\"\n    if not pd:\n        return {\n            \"ok\": False,\n            \"stdout\": \"\",\n            \"stderr\": \"Pandas library not installed. Install with: pip install pandas\"\n        }\n    try:\n        df = pd.read_csv(csv_path)",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "run_py_action",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def run_py_action(action: str, args: Dict[str, Any]) -> Dict[str, Any]:\n    \"\"\"\n    Dispatch table for tool=\"py\".\n    \"\"\"\n    if action == \"search_folder\":\n        term = args.get(\"term\", \"\")\n        rootp = args.get(\"start_root\", \"C:\\\\\")\n        return _py_search_folder(term, rootp)\n    if action == \"list_dir\":\n        path = args.get(\"path\", \"\")",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "run_tool_step",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def run_tool_step(step: Dict[str, Any]) -> Dict[str, Any]:\n    \"\"\"\n    Unified executor.\n    step = {\n      \"tool\": \"cmd\" | \"py\",\n      ...\n    }\n    \"\"\"\n    tool = step.get(\"tool\", \"\")\n    if tool == \"cmd\":",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
+        "label": "agent_turn",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def agent_turn(user_msg: str, history: list, session_state: dict):\n    if not session_state or session_state.get(\"session_id\") is None:\n        session_state = {\"session_id\": str(uuid.uuid4())}\n    convo_history = history + [{\"role\": \"user\", \"content\": user_msg}]\n    base_dir = os.getenv(\n        \"AGENT_BASE_DIR\"\n    )\n    final_answer, _debug_info = run_agent_once(\n        goal=user_msg,\n        chat_history=convo_history,",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def main():\n    demo_graph = build_demo_graph()\n    print(\"=== AGENT FLOW GRAPH (LangGraph ASCII) ===\")\n    print(demo_graph.get_graph().draw_ascii())\n    print(\"=========================================\\n\")\n    with gr.Blocks() as demo:\n        gr.Markdown(\"A General Local Agent for Computer Task Execution\")\n        chatbot = gr.Chatbot(\n            label=\"Local Agent\",\n            height=400,",
+        "detail": "app",
         "documentation": {}
     }
 ]
