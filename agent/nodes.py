@@ -1,7 +1,7 @@
 import os
 import subprocess
 import tempfile
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 from .state import AgentState, ls_start_run, ls_end_run
 from .llm import (
@@ -9,15 +9,14 @@ from .llm import (
     assess_success,
     repair_command,
     summarize_final,
+    ask_gemini_raw,
 )
 
-
-
+#
+# ---- basic executors for cmd & python ----
+#
 
 def _run_cmd_once(command: str) -> Dict[str, Any]:
-    """
-    Run ONE Windows shell / PowerShell command.
-    """
     try:
         proc = subprocess.run(
             command,
@@ -32,17 +31,10 @@ def _run_cmd_once(command: str) -> Dict[str, Any]:
             "stderr": proc.stderr.strip(),
         }
     except Exception as e:
-        return {
-            "returncode": -1,
-            "stdout": "",
-            "stderr": f"Exception while running command: {e}",
-        }
+        return {"returncode": -1, "stdout": "", "stderr": f"Exception: {e}"}
 
 
 def _run_python_once(code_str: str) -> Dict[str, Any]:
-    """
-    Write code_str to a temp file, run python temp.py, capture output.
-    """
     tmp_path = None
     try:
         with tempfile.NamedTemporaryFile(
@@ -50,25 +42,19 @@ def _run_python_once(code_str: str) -> Dict[str, Any]:
         ) as f:
             tmp_path = f.name
             f.write(code_str)
-
         proc = subprocess.run(
             ["python", tmp_path],
             capture_output=True,
             text=True,
             timeout=20,
         )
-
         return {
             "returncode": proc.returncode,
             "stdout": proc.stdout.strip(),
             "stderr": proc.stderr.strip(),
         }
     except Exception as e:
-        return {
-            "returncode": -1,
-            "stdout": "",
-            "stderr": f"Exception while running python code: {e}",
-        }
+        return {"returncode": -1, "stdout": "", "stderr": f"Exception: {e}"}
     finally:
         if tmp_path and os.path.exists(tmp_path):
             try:
@@ -77,33 +63,206 @@ def _run_python_once(code_str: str) -> Dict[str, Any]:
                 pass
 
 
-def _exec_once(language: str, command: str) -> Dict[str, Any]:
+#
+# ---- LLM file tool helpers ----
+#
+
+def _find_matching_file(base_dir: str, pattern: str) -> Optional[str]:
     """
-    Dispatch to cmd or python executor.
+    Resolve file_pattern to a single file path:
+    - If absolute path and exists -> return.
+    - If direct join(base_dir, pattern) exists -> return.
+    - Else: walk base_dir and match by filename (case-insensitive).
+    Returns first match or None.
+    """
+    pattern = pattern.strip().strip('"').strip("'")
+
+    # absolute
+    if os.path.isabs(pattern) and os.path.isfile(pattern):
+        return pattern
+
+    # direct under base_dir
+    candidate = os.path.join(base_dir, pattern)
+    if os.path.isfile(candidate):
+        return candidate
+
+    # search by name
+    target_lower = os.path.basename(pattern).lower()
+    for root, _dirs, files in os.walk(base_dir):
+        for fn in files:
+            if fn.lower() == target_lower:
+                return os.path.join(root, fn)
+
+    return None
+
+
+def _read_text_file(path: str, max_chars: int = 6000) -> str:
+    try:
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+            data = f.read(max_chars + 1)
+        if len(data) > max_chars:
+            data = data[:max_chars]
+        return data
+    except Exception as e:
+        return f"[ERROR reading text file: {e}]"
+
+
+def _read_csv_head(path: str, max_lines: int = 40) -> str:
+    """
+    Read first N lines of a CSV or similar structured file.
+    """
+    try:
+        lines = []
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+            for i, line in enumerate(f):
+                if i >= max_lines:
+                    break
+                lines.append(line.rstrip("\n"))
+        return "\n".join(lines)
+    except Exception as e:
+        return f"[ERROR reading csv file: {e}]"
+
+
+def _extract_pdf_text(path: str, max_chars: int = 6000) -> str:
+    """
+    Try to extract text from a PDF using PyPDF2 if available.
+    If not installed or fails, return a hint string.
+    """
+    try:
+        import PyPDF2  # type: ignore
+    except ImportError:
+        return "[PyPDF2 not installed; cannot directly parse PDF text. File path: {}]".format(path)
+
+    try:
+        text = []
+        with open(path, "rb") as f:
+            reader = PyPDF2.PdfReader(f)
+            for page in reader.pages:
+                page_text = page.extract_text() or ""
+                text.append(page_text)
+                if sum(len(t) for t in text) > max_chars:
+                    break
+        joined = "\n".join(text)
+        if len(joined) > max_chars:
+            joined = joined[:max_chars]
+        return joined if joined.strip() else "[No extractable text from PDF {}]".format(path)
+    except Exception as e:
+        return f"[ERROR extracting PDF text: {e}]"
+
+
+def _run_llm_file_tool(
+    base_dir: str,
+    description: str,
+    file_pattern: str,
+    user_prompt: str,
+) -> Dict[str, Any]:
+    """
+    Implementation of the llm_file 'tool':
+    - Locate one file matching file_pattern under base_dir.
+    - Depending on extension:
+        * csv/txt/log/json -> read snippet
+        * pdf              -> extract snippet
+        * image            -> (optional) treat as vision; here: describe via LLM with a note.
+    - Call ask_gemini_raw with a constructed prompt that includes snippet.
+    - Return as stdout.
+    """
+    path = _find_matching_file(base_dir, file_pattern)
+    if not path:
+        return {
+            "returncode": 1,
+            "stdout": "",
+            "stderr": f"No file found for pattern '{file_pattern}' under {base_dir}",
+        }
+
+    ext = os.path.splitext(path)[1].lower()
+    snippet = ""
+
+    if ext in (".csv", ".tsv"):
+        snippet = _read_csv_head(path)
+    elif ext in (".txt", ".log", ".md", ".json"):
+        snippet = _read_text_file(path)
+    elif ext in (".pdf",):
+        snippet = _extract_pdf_text(path)
+    elif ext in (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"):
+        # For simplicity we do a text-only wrapper.
+        # If you enable Gemini vision with inline_data, you can enhance this.
+        snippet = "[Image file at {}. You may describe or infer based on its content if vision is enabled.]".format(path)
+    else:
+        # generic text read attempt
+        snippet = _read_text_file(path)
+
+    # Build LLM prompt
+    prompt = f"""
+You are an assistant with access to the contents of a local file.
+
+User goal / subtask:
+{description}
+
+User instruction for this file:
+{user_prompt}
+
+File path:
+{path}
+
+Here is a snippet / extracted content from the file:
+----------------
+{snippet}
+----------------
+
+Based ONLY on this file content and the instructions, provide a helpful answer.
+If the snippet looks truncated, still answer with whatever is visible.
+
+Your answer will be captured as stdout for an automated agent.
+Do NOT include JSON; just answer in natural language.
+"""
+
+    answer = ask_gemini_raw(prompt)
+
+    return {
+        "returncode": 0,
+        "stdout": f"LLM_FILE_TOOL RESULT (from {os.path.basename(path)}):\n{answer.strip()}",
+        "stderr": "",
+    }
+
+
+def _exec_once(
+    language: str,
+    command: str,
+    base_dir: str,
+    subtask: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Dispatch subtask execution:
+    - cmd       -> shell/PowerShell
+    - python    -> temp script
+    - llm_file  -> local file + LLM analysis
     """
     if language == "python":
         return _run_python_once(command)
-    else:
-        return _run_cmd_once(command)
+    if language == "llm_file":
+        file_pattern = subtask.get("file_pattern", "")
+        user_prompt = subtask.get("prompt", "") or subtask.get("description", "")
+        return _run_llm_file_tool(
+            base_dir=base_dir,
+            description=subtask.get("description", ""),
+            file_pattern=file_pattern,
+            user_prompt=user_prompt,
+        )
+    # default: cmd
+    return _run_cmd_once(command)
 
 
-
+#
+# ---- LangGraph node implementations ----
+#
 
 def plan_node(state: AgentState) -> AgentState:
-    """
-    Call Gemini planner to produce subtasks + success criteria.
-    Initialize cursor/attempt/etc.
-    Also open a 'plan_tasks' child span in LangSmith.
-    """
     parent_id = state.get("parent_run_id")
 
-    plan_span = ls_start_run(
+    span = ls_start_run(
         name="plan_tasks",
         run_type="llm",
-        inputs={
-            "goal": state["goal"],
-            "base_dir": state["base_dir"],
-        },
+        inputs={"goal": state["goal"], "base_dir": state["base_dir"]},
         parent_run_id=parent_id,
     )
 
@@ -113,9 +272,8 @@ def plan_node(state: AgentState) -> AgentState:
         base_dir=state["base_dir"],
     )
 
-    ls_end_run(plan_span, outputs={"plan": plan}, error=None)
+    ls_end_run(span, outputs={"plan": plan}, error=None)
 
-    # init loop state
     return {
         "plan": plan,
         "subtasks": plan.get("subtasks", []),
@@ -132,29 +290,20 @@ def plan_node(state: AgentState) -> AgentState:
 
 
 def execute_node(state: AgentState) -> AgentState:
-    """
-    Execute the current subtask command/script.
-    Increment attempt.
-    Trace child span 'execute'.
-    """
     subtasks = state.get("subtasks", [])
     cursor = state.get("cursor", 0)
-    attempt = state.get("attempt", 0) + 1  
+    attempt = state.get("attempt", 0) + 1
+    base_dir = state.get("base_dir", os.getcwd())
 
     if cursor < 0 or cursor >= len(subtasks):
-        # nothing to run
-        return {
-            "attempt": attempt,
-            "last_stdout": "",
-            "last_stderr": "",
-        }
+        return {"attempt": attempt, "last_stdout": "", "last_stderr": ""}
 
     st = subtasks[cursor]
     lang = st.get("language", "cmd")
     cmd = st.get("command", "")
     desc = st.get("description", "")
 
-    exec_span = ls_start_run(
+    span = ls_start_run(
         name="execute",
         run_type="tool",
         inputs={
@@ -163,38 +312,32 @@ def execute_node(state: AgentState) -> AgentState:
             "description": desc,
             "language": lang,
             "command": cmd,
+            "file_pattern": st.get("file_pattern", ""),
+            "prompt": st.get("prompt", ""),
         },
         parent_run_id=state.get("parent_run_id"),
     )
 
-    res = _exec_once(lang, cmd)
-    stdout = res.get("stdout", "")
-    stderr = res.get("stderr", "")
-    rc = res.get("returncode", 0)
+    res = _exec_once(lang, cmd, base_dir=base_dir, subtask=st)
 
     ls_end_run(
-        exec_span,
+        span,
         outputs={
-            "returncode": rc,
-            "stdout": stdout[:1000],
-            "stderr": stderr[:500],
+            "returncode": res.get("returncode"),
+            "stdout": res.get("stdout", "")[:1200],
+            "stderr": res.get("stderr", "")[:400],
         },
         error=None,
     )
 
     return {
         "attempt": attempt,
-        "last_stdout": stdout,
-        "last_stderr": stderr,
+        "last_stdout": res.get("stdout", ""),
+        "last_stderr": res.get("stderr", ""),
     }
 
 
 def verify_node(state: AgentState) -> AgentState:
-    """
-    Ask Gemini if success criteria was met.
-    If yes, append a success entry into results_for_final.
-    Trace child span 'verify'.
-    """
     subtasks = state.get("subtasks", [])
     cursor = state.get("cursor", 0)
     attempt = state.get("attempt", 0)
@@ -212,7 +355,7 @@ def verify_node(state: AgentState) -> AgentState:
     desc = st.get("description", "")
     crit = st.get("success_criteria", "")
 
-    verify_span = ls_start_run(
+    span = ls_start_run(
         name="verify",
         run_type="llm",
         inputs={
@@ -220,7 +363,7 @@ def verify_node(state: AgentState) -> AgentState:
             "attempt": attempt,
             "description": desc,
             "success_criteria": crit,
-            "stdout": state.get("last_stdout", "")[:500],
+            "stdout": state.get("last_stdout", "")[:600],
             "stderr": state.get("last_stderr", "")[:300],
         },
         parent_run_id=state.get("parent_run_id"),
@@ -235,11 +378,12 @@ def verify_node(state: AgentState) -> AgentState:
     why = check.get("reason", "")
 
     ls_end_run(
-        verify_span,
+        span,
         outputs={"assess": check},
         error=None if ok else "not satisfied",
     )
 
+    # record success immediately
     if ok:
         results.append({
             "id": sid,
@@ -258,14 +402,6 @@ def verify_node(state: AgentState) -> AgentState:
 
 
 def route_after_verify_node(state: AgentState) -> AgentState:
-    """
-    Decide next route:
-    - success -> next subtask or finalize
-    - fail but retries left -> repair_subtask
-    - fail and retries done -> record failure and move on or finalize
-
-    We set state["route"] to "execute", "repair_subtask", or "finalize".
-    """
     subtasks = state.get("subtasks", [])
     cursor = state.get("cursor", 0)
     attempt = state.get("attempt", 0)
@@ -273,8 +409,22 @@ def route_after_verify_node(state: AgentState) -> AgentState:
     results = state.get("results_for_final", [])
     ok = state.get("last_success", False)
 
-    # if cursor invalid, just finalize
     if cursor < 0 or cursor >= len(subtasks):
+        return {"route": "finalize", "cursor": cursor, "attempt": attempt,
+                "results_for_final": results}
+
+    st = subtasks[cursor]
+    sid = st.get("id")
+    desc = st.get("description", "")
+
+    if ok:
+        if cursor + 1 < len(subtasks):
+            return {
+                "route": "execute",
+                "cursor": cursor + 1,
+                "attempt": 0,
+                "results_for_final": results,
+            }
         return {
             "route": "finalize",
             "cursor": cursor,
@@ -282,40 +432,17 @@ def route_after_verify_node(state: AgentState) -> AgentState:
             "results_for_final": results,
         }
 
-    st = subtasks[cursor]
-    sid = st.get("id")
-    desc = st.get("description", "")
-
-    if ok:
-        # success path
-        if cursor + 1 < len(subtasks):
-            # proceed to next subtask
-            return {
-                "route": "execute",
-                "cursor": cursor + 1,
-                "attempt": 0,
-                "results_for_final": results,
-            }
-        else:
-            # no more subtasks
-            return {
-                "route": "finalize",
-                "cursor": cursor,
-                "attempt": attempt,
-                "results_for_final": results,
-            }
-
-    # not success
-    if attempt < max_retries:
-        # we can retry after repair
+    # fail
+    if attempt < max_retries and st.get("language") in ("cmd", "python"):
+        # only cmd/python tasks go through repair loop
         return {
             "route": "repair_subtask",
             "cursor": cursor,
-            "attempt": attempt,  # attempt increments in execute_node
+            "attempt": attempt,
             "results_for_final": results,
         }
 
-    # out of retries: log failure and move on
+    # out of retries or llm_file failure => log failure and move on/finalize
     results.append({
         "id": sid,
         "description": desc,
@@ -342,19 +469,10 @@ def route_after_verify_node(state: AgentState) -> AgentState:
 
 
 def route_router(state: AgentState) -> str:
-    """
-    Tiny router fn that LangGraph calls. Must return
-    'execute', 'repair_subtask', or 'finalize'.
-    """
     return state.get("route", "finalize")
 
 
 def repair_subtask_node(state: AgentState) -> AgentState:
-    """
-    Ask Gemini to fix the command for current subtask.
-    Update that subtask's language/command.
-    Trace 'repair_subtask' span.
-    """
     subtasks = state.get("subtasks", [])
     cursor = state.get("cursor", 0)
     attempt = state.get("attempt", 0)
@@ -363,13 +481,18 @@ def repair_subtask_node(state: AgentState) -> AgentState:
         return {}
 
     st = subtasks[cursor]
+
+    # Only repair cmd/python; llm_file is conceptual
+    if st.get("language") not in ("cmd", "python"):
+        return {}
+
     sid = st.get("id")
     desc = st.get("description", "")
     crit = st.get("success_criteria", "")
     lang = st.get("language", "cmd")
     cmd = st.get("command", "")
 
-    repair_span = ls_start_run(
+    span = ls_start_run(
         name="repair_subtask",
         run_type="llm",
         inputs={
@@ -377,7 +500,7 @@ def repair_subtask_node(state: AgentState) -> AgentState:
             "attempt": attempt,
             "old_language": lang,
             "old_command": cmd,
-            "stdout": state.get("last_stdout", "")[:500],
+            "stdout": state.get("last_stdout", "")[:600],
             "stderr": state.get("last_stderr", "")[:300],
             "criteria": crit,
             "description": desc,
@@ -395,40 +518,23 @@ def repair_subtask_node(state: AgentState) -> AgentState:
         stderr=state.get("last_stderr", ""),
     )
 
-    ls_end_run(
-        repair_span,
-        outputs={"fix": fix},
-        error=None,
-    )
+    ls_end_run(span, outputs={"fix": fix}, error=None)
 
     st["language"] = fix.get("language", lang)
     st["command"] = fix.get("command", cmd)
     subtasks[cursor] = st
 
-    return {
-        "subtasks": subtasks
-    }
+    return {"subtasks": subtasks}
 
 
 def finalize_node(state: AgentState) -> AgentState:
-    """
-    Summarize final result for the user.
-    Trace 'finalize' span.
-    """
-    fin_span = ls_start_run(
+    span = ls_start_run(
         name="finalize",
         run_type="llm",
         inputs={
             "goal": state.get("goal", ""),
             "base_dir": state.get("base_dir", ""),
             "global_success_criteria": state.get("global_success_criteria", ""),
-            "subtask_results_preview": [
-                {
-                    "id": r.get("id"),
-                    "desc": r.get("description"),
-                    "success": r.get("success"),
-                } for r in state.get("results_for_final", [])
-            ],
         },
         parent_run_id=state.get("parent_run_id"),
     )
@@ -440,12 +546,6 @@ def finalize_node(state: AgentState) -> AgentState:
         subtask_results=state.get("results_for_final", []),
     )
 
-    ls_end_run(
-        fin_span,
-        outputs={"final_answer": final_answer},
-        error=None,
-    )
+    ls_end_run(span, outputs={"final_answer": final_answer}, error=None)
 
-    return {
-        "final_answer": final_answer
-    }
+    return {"final_answer": final_answer}

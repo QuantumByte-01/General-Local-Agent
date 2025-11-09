@@ -3,19 +3,28 @@ import json
 from typing import Any, Dict, List
 from google import genai
 
-
+#
+# --- Gemini client helpers ---
+#
 
 def _get_client():
+    """
+    Build Gemini client from GEMINI_API_KEY in .env.
+    """
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
     if not api_key:
         return genai.Client()
     try:
         return genai.Client(api_key=api_key)
     except TypeError:
+        # Some SDKs auto-read env, ignore mismatch
         return genai.Client()
 
 
 def ask_gemini_raw(prompt: str) -> str:
+    """
+    Send a pure-text prompt to Gemini 2.5 Flash and get response.text.
+    """
     try:
         client = _get_client()
         resp = client.models.generate_content(
@@ -30,6 +39,9 @@ def ask_gemini_raw(prompt: str) -> str:
         return f"[LLM call failed: {e}]"
 
 
+#
+# --- JSON parsing helper ---
+#
 
 def _try_parse_json(raw: str, fallback: Any) -> Any:
     raw = raw.strip()
@@ -38,6 +50,7 @@ def _try_parse_json(raw: str, fallback: Any) -> Any:
     except Exception:
         pass
 
+    # Try slice {...} or [...]
     start_brace = raw.find("{")
     start_brack = raw.find("[")
     starts = [i for i in (start_brace, start_brack) if i != -1]
@@ -58,11 +71,6 @@ def _try_parse_json(raw: str, fallback: Any) -> Any:
 
 
 def _format_chat_history(history: List[Dict[str, str]], limit: int = 8) -> str:
-    """
-    Make a short transcript for planner.
-    history is like:
-      [{"role":"user","content":"..."},{"role":"assistant","content":"..."}]
-    """
     take = history[-limit:]
     lines = []
     for msg in take:
@@ -72,6 +80,9 @@ def _format_chat_history(history: List[Dict[str, str]], limit: int = 8) -> str:
     return "\n".join(lines)
 
 
+#
+# --- Planner LLM ---
+#
 
 def plan_tasks(
     chat_history: List[Dict[str, str]],
@@ -79,107 +90,121 @@ def plan_tasks(
     base_dir: str
 ) -> Dict[str, Any]:
     """
-    Ask Gemini to break the user goal into ordered subtasks.
+    Planner can now emit three kinds of subtasks:
 
-    Expected ONLY valid JSON:
-    {
-      "global_success_criteria": "...",
-      "subtasks": [
-        {
-          "id": 1,
-          "description": "what this subtask does",
-          "success_criteria": "how we know this subtask succeeded",
-          "language": "cmd" | "python",
-          "command": "actual command or python script"
-        },
-        ...
-      ]
-    }
+    1) Shell command:
+       {
+         "id": 1,
+         "description": "...",
+         "success_criteria": "...",
+         "language": "cmd",
+         "command": "dir ..."
+       }
 
-    - Use base_dir ("AGENT_BASE_DIR") as default search root unless user gave
-      an absolute path.
-    - For python subtasks: MUST be full, self-contained, fast scripts using ONLY
-      Python standard library (os, sys, csv, glob, pathlib, etc.).
-      NO pandas, NO pip install.
-      OK: open file, walk dirs, print first 5 lines.
-    - For cmd subtasks: MUST be one Windows command or PowerShell command
-      (no && chains).
-    - success_criteria must be about what's visible in stdout/stderr.
+    2) Python script:
+       {
+         "id": 2,
+         "description": "...",
+         "success_criteria": "...",
+         "language": "python",
+         "command": "import os\n..."
+       }
 
-    We'll run subtasks in order. For each subtask:
-       execute -> verify -> if fail -> repair -> retry (up to max_retries)
+    3) LLM file tool (NEW):
+       {
+         "id": 3,
+         "description": "Have the LLM read/summarize heart.csv",
+         "success_criteria": "stdout must contain an answer based on heart.csv contents.",
+         "language": "llm_file",
+         "file_pattern": "heart.csv",
+         "prompt": "Read heart.csv and show the first 5 rows and column names."
+       }
+
+    For llm_file:
+      - file_pattern: relative name or glob-like hint under AGENT_BASE_DIR,
+                      or an absolute path.
+      - prompt: instruction/question for that file.
+      The node will:
+        - locate the file
+        - read or extract content (CSV/TXT/PDF)
+        - call Gemini with the prompt + content snippet
+        - print the LLM answer as stdout.
     """
 
     chat_context = _format_chat_history(chat_history)
 
     planner_prompt = f"""
-You are the PLANNER for a local Windows automation agent.
+You are the PLANNER for a local Windows + LLM agent.
 
 AGENT_BASE_DIR = "{base_dir}"
 
-User wants to achieve a goal using this computer.
-You will output ONLY VALID JSON (no commentary outside JSON) with this shape:
+You receive a USER_GOAL and recent chat history.
+You must break the goal into 1..6 ordered subtasks.
+
+OUTPUT FORMAT (ONLY VALID JSON):
 
 {{
-  "global_success_criteria": "string explaining when the WHOLE goal is done",
+  "global_success_criteria": "string",
   "subtasks": [
     {{
       "id": 1,
-      "description": "natural language meaning of the subtask",
-      "success_criteria": "stdout/stderr condition that proves success",
-      "language": "cmd" | "python",
-      "command": "command or FULL python script body"
+      "description": "string",
+      "success_criteria": "string",
+      "language": "cmd" | "python" | "llm_file",
+      "command": "string (for cmd/python only)",
+      "file_pattern": "optional, for llm_file",
+      "prompt": "optional, for llm_file"
     }},
-    {{
-      "id": 2,
-      "description": "...",
-      "success_criteria": "...",
-      "language": "cmd" | "python",
-      "command": "..."
-    }}
+    ...
   ]
 }}
 
-RULES:
-1. If user wants info about files, folders, CSVs, etc., assume those are under
-   AGENT_BASE_DIR unless user mentions an absolute path elsewhere.
-   Use quoted Windows paths if they contain spaces,
-   e.g. "C:\\Users\\Swastik R\\Downloads\\Data Formats".
-2. If language == "cmd":
-   - Provide ONE PowerShell/cmd command only.
-   - No "&&" chaining.
-3. If language == "python":
-   - Provide a COMPLETE python script body that we can write to temp.py and run.
-   - Standard library only (os, sys, csv, io, glob, pathlib, etc.).
-   - Must run quickly (under ~2 seconds).
-   - If printing first 5 lines of a CSV, do something like:
-        import os
-        target = r"...absolute\\path\\file.csv"
-        if os.path.isfile(target):
-            print("FILE_PATH:", target)
-            with open(target, "r", encoding="utf-8", errors="ignore") as f:
-                for i, line in enumerate(f):
-                    if i >= 5: break
-                    print(line.rstrip())
-        else:
-            print("FILE_NOT_FOUND", target)
-4. success_criteria must describe the expected stdout/stderr contents.
-   Example:
-   "stdout must include at least 5 CSV lines and the absolute path of the file."
-   "stdout must list all .pdf files in the folder, one per line."
-   "stdout must include CPU load percentage and RAM in GB."
+INTERPRETATION:
 
-We'll run each subtask in sequence.
-After each we capture stdout/stderr and check success_criteria.
-If it fails, we will ask you (in repair mode) to fix the command and retry.
+1) language="cmd":
+   - Provide ONE Windows cmd/PowerShell command (no &&).
+   - Use quoted absolute paths if they contain spaces.
+   - Use AGENT_BASE_DIR as default root unless user gave an absolute path.
+
+2) language="python":
+   - Provide a FULL Python script body.
+   - Standard library only (os, sys, csv, glob, pathlib, etc.).
+   - No external installs.
+   - Must run quickly.
+   - Good for structured reading (e.g., print first 5 lines of a CSV).
+
+3) language="llm_file" (NEW):
+   - Use when the user asks:
+       * "summarize this PDF"
+       * "analyze this CSV"
+       * "what's in this image"
+       * "explain the content of ..."
+   - Fields:
+       * file_pattern: required. A filename or simple pattern,
+         relative to AGENT_BASE_DIR unless absolute path is given.
+         e.g. "heart.csv", "FML Mid.pdf", "data/*.csv".
+       * prompt: required. Natural language instruction for analyzing the file.
+   - Do NOT put shell/python code in "command" for llm_file.
+   - The runtime will:
+       * find the file(s),
+       * read text (CSV/TXT/PDF) or image bytes,
+       * call the LLM with (prompt + file content),
+       * return that answer via stdout.
+
+SUCCESS CRITERIA:
+- For every subtask, success_criteria must reference what we should see in stdout/stderr.
+- Examples:
+    "stdout must list at least one matching path"
+    "stdout must contain 5 CSV rows and the file path"
+    "stdout must be a summary of the PDF sections"
 
 CHAT HISTORY:
 {chat_context}
 
-USER GOAL:
+USER_GOAL:
 "{goal}"
 
-Return ONLY the JSON object. No English outside the JSON.
+Return ONLY the JSON object, no extra commentary.
 """
 
     fallback = {
@@ -210,24 +235,38 @@ Return ONLY the JSON object. No English outside the JSON.
     for st in subtasks:
         if not isinstance(st, dict):
             continue
+
         sid = st.get("id", None)
         desc = (st.get("description", "") or "").strip()
         crit = (st.get("success_criteria", "") or "").strip()
         lang = (st.get("language", "") or "").strip().lower()
         cmd = (st.get("command", "") or "").strip()
+        file_pattern = (st.get("file_pattern", "") or "").strip()
+        llm_prompt = (st.get("prompt", "") or "").strip()
 
-        if lang not in ("cmd", "python"):
+        if lang not in ("cmd", "python", "llm_file"):
             lang = "cmd"
-        if not cmd:
+
+        # basic validation
+        if lang in ("cmd", "python") and not cmd:
+            continue
+        if lang == "llm_file" and (not file_pattern or not llm_prompt):
             continue
 
-        cleaned.append({
+        entry = {
             "id": sid,
             "description": desc,
             "success_criteria": crit,
             "language": lang,
-            "command": cmd,
-        })
+        }
+
+        if lang in ("cmd", "python"):
+            entry["command"] = cmd
+        if lang == "llm_file":
+            entry["file_pattern"] = file_pattern
+            entry["prompt"] = llm_prompt
+
+        cleaned.append(entry)
 
     if not cleaned:
         cleaned = fallback["subtasks"]
@@ -241,7 +280,9 @@ Return ONLY the JSON object. No English outside the JSON.
     }
 
 
-
+#
+# --- Verifier LLM ---
+#
 
 def assess_success(
     success_criteria: str,
@@ -250,26 +291,29 @@ def assess_success(
 ) -> Dict[str, Any]:
     """
     Ask Gemini if success_criteria is satisfied.
-    Respond ONLY JSON:
+
+    Returns ONLY:
     {
       "success": true/false,
-      "reason": "short reason"
+      "reason": "..."
     }
     """
 
     prompt = f"""
 You are the SUCCESS CHECKER.
 
-SUBTASK SUCCESS CRITERIA:
+SUCCESS CRITERIA:
 {success_criteria}
 
-COMMAND STDOUT:
+STDOUT:
 {stdout[:2000]}
 
-COMMAND STDERR:
+STDERR:
 {stderr[:800]}
 
-Reply ONLY valid JSON:
+Is the criteria satisfied?
+
+Return ONLY JSON:
 {{
   "success": true/false,
   "reason": "short explanation"
@@ -289,6 +333,9 @@ Reply ONLY valid JSON:
     return data
 
 
+#
+# --- Repair LLM ---
+#
 
 def repair_command(
     base_dir: str,
@@ -300,12 +347,8 @@ def repair_command(
     stderr: str,
 ) -> Dict[str, Any]:
     """
-    Ask Gemini to fix a failing subtask's command.
-    Return ONLY JSON:
-    {
-      "language": "cmd" | "python",
-      "command": "..."
-    }
+    Only used for cmd/python subtasks.
+    llm_file subtasks are conceptual; if they fail, planner should fix them in next loop.
     """
 
     prompt = f"""
@@ -313,10 +356,10 @@ You are the COMMAND REPAIR AGENT.
 
 AGENT_BASE_DIR = "{base_dir}"
 
-SUBTASK DESCRIPTION:
+SUBTASK:
 {subtask_desc}
 
-SUBTASK SUCCESS CRITERIA:
+SUCCESS CRITERIA:
 {success_criteria}
 
 We attempted this ({language}):
@@ -324,52 +367,42 @@ We attempted this ({language}):
 
 Result:
 STDOUT:
-{stdout[:2000]}
+{stdout[:1500]}
 STDERR:
 {stderr[:800]}
 
-We did NOT meet success_criteria.
+We did NOT meet the criteria.
 
-Fix it. Return ONLY valid JSON:
+Return ONLY JSON:
 {{
   "language": "cmd" | "python",
   "command": "..."
 }}
 
 Rules:
-- If "cmd": return ONE PowerShell/cmd command (no &&).
-- If "python": return a COMPLETE python script body we can run directly.
-- Use ONLY python stdlib. No pandas, no pip install.
-- Must run quickly (<2 seconds).
-- Quote Windows paths with spaces, e.g. "C:\\Users\\Swastik R\\Downloads\\Data Formats".
-- Reuse discovered absolute file paths from stdout if helpful.
-
-No commentary outside the JSON.
+- Keep it to ONE cmd or ONE full python script.
+- Python = stdlib only, no installs.
+- Use absolute, quoted Windows paths when needed.
 """
 
     raw = ask_gemini_raw(prompt)
-    fallback = {
-        "language": language,
-        "command": last_command,
-    }
-
+    fallback = {"language": language, "command": last_command}
     data = _try_parse_json(raw, fallback=fallback)
+
     if not isinstance(data, dict):
         data = fallback
 
     new_lang = (data.get("language", language) or "").strip().lower()
     if new_lang not in ("cmd", "python"):
         new_lang = "cmd"
-
     new_cmd = (data.get("command", last_command) or "").strip()
 
-    return {
-        "language": new_lang,
-        "command": new_cmd,
-    }
+    return {"language": new_lang, "command": new_cmd}
 
 
-
+#
+# --- Final summarizer LLM ---
+#
 
 def summarize_final(
     goal: str,
@@ -378,8 +411,7 @@ def summarize_final(
     subtask_results: List[Dict[str, Any]]
 ) -> str:
     """
-    Ask Gemini to generate the final answer for the user, describing what
-    happened, what paths we found, results from CSV previews, system stats, etc.
+    Build final natural-language answer for the user.
     """
 
     compact = []
@@ -392,32 +424,32 @@ def summarize_final(
             "stdout": (r.get("stdout", "")[:1200]),
             "stderr": (r.get("stderr", "")[:400]),
         })
-    results_json_str = json.dumps(compact, indent=2)
+    summary_json = json.dumps(compact, indent=2)
 
     prompt = f"""
-You are the FINAL RESPONSE WRITER.
+You are the FINAL RESPONSE WRITER for a local computer assistant.
 
 AGENT_BASE_DIR = "{base_dir}"
 
 USER GOAL:
 {goal}
 
-GLOBAL SUCCESS CRITERIA FOR WHOLE GOAL:
+GLOBAL SUCCESS CRITERIA:
 {global_success}
 
 SUBTASK RESULTS:
-{results_json_str}
+{summary_json}
 
-Write a final message for the user:
-- Summarize what we actually did on the machine.
-- Mention important file paths found.
-- If we printed CSV rows, summarize them or include them briefly.
-- Summarize system info if collected (CPU usage, RAM, disk).
-- Be honest about any failures after retries.
-- Be clear and helpful.
-- Do NOT include internal debugging or stack traces.
+Write a clear final response:
+- Explain what the agent actually did.
+- Mention important file paths.
+- For CSV/PDF analysis, summarize key findings or show short excerpts.
+- For images, describe what was inferred.
+- Include system info if relevant.
+- Be honest about any failures.
+- No debug traces, no JSON, just a nice explanation.
 
-Return plain English only.
+Return plain text only.
 """
 
     return ask_gemini_raw(prompt).strip()

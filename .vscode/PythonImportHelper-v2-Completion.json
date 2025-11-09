@@ -394,6 +394,14 @@
         "documentation": {}
     },
     {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "List",
         "importPath": "typing",
         "description": "typing",
@@ -1247,7 +1255,7 @@
         "kind": 2,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "def ask_gemini_raw(prompt: str) -> str:\n    try:\n        client = _get_client()\n        resp = client.models.generate_content(\n            model=\"gemini-2.5-flash\",\n            contents=prompt,\n        )\n        try:\n            return resp.text\n        except Exception:",
+        "peekOfCode": "def ask_gemini_raw(prompt: str) -> str:\n    \"\"\"\n    Send a pure-text prompt to Gemini 2.5 Flash and get response.text.\n    \"\"\"\n    try:\n        client = _get_client()\n        resp = client.models.generate_content(\n            model=\"gemini-2.5-flash\",\n            contents=prompt,\n        )",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1256,7 +1264,7 @@
         "kind": 2,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "def plan_tasks(\n    chat_history: List[Dict[str, str]],\n    goal: str,\n    base_dir: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Ask Gemini to break the user goal into ordered subtasks.\n    Expected ONLY valid JSON:\n    {\n      \"global_success_criteria\": \"...\",",
+        "peekOfCode": "def plan_tasks(\n    chat_history: List[Dict[str, str]],\n    goal: str,\n    base_dir: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Planner can now emit three kinds of subtasks:\n    1) Shell command:\n       {\n         \"id\": 1,",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1265,7 +1273,7 @@
         "kind": 2,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "def assess_success(\n    success_criteria: str,\n    stdout: str,\n    stderr: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Ask Gemini if success_criteria is satisfied.\n    Respond ONLY JSON:\n    {\n      \"success\": true/false,",
+        "peekOfCode": "def assess_success(\n    success_criteria: str,\n    stdout: str,\n    stderr: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Ask Gemini if success_criteria is satisfied.\n    Returns ONLY:\n    {\n      \"success\": true/false,",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1283,7 +1291,7 @@
         "kind": 2,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "def summarize_final(\n    goal: str,\n    base_dir: str,\n    global_success: str,\n    subtask_results: List[Dict[str, Any]]\n) -> str:\n    \"\"\"\n    Ask Gemini to generate the final answer for the user, describing what\n    happened, what paths we found, results from CSV previews, system stats, etc.\n    \"\"\"",
+        "peekOfCode": "def summarize_final(\n    goal: str,\n    base_dir: str,\n    global_success: str,\n    subtask_results: List[Dict[str, Any]]\n) -> str:\n    \"\"\"\n    Build final natural-language answer for the user.\n    \"\"\"\n    compact = []",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1292,7 +1300,7 @@
         "kind": 5,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nUser wants to achieve a goal using this computer.\nYou will output ONLY VALID JSON (no commentary outside JSON) with this shape:\n{{\n  \"global_success_criteria\": \"string explaining when the WHOLE goal is done\",\n  \"subtasks\": [\n    {{\n      \"id\": 1,\n      \"description\": \"natural language meaning of the subtask\",\n      \"success_criteria\": \"stdout/stderr condition that proves success\",",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nYou receive a USER_GOAL and recent chat history.\nYou must break the goal into 1..6 ordered subtasks.\nOUTPUT FORMAT (ONLY VALID JSON):\n{{\n  \"global_success_criteria\": \"string\",\n  \"subtasks\": [\n    {{\n      \"id\": 1,\n      \"description\": \"string\",",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1301,7 +1309,7 @@
         "kind": 5,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nSUBTASK DESCRIPTION:\n{subtask_desc}\nSUBTASK SUCCESS CRITERIA:\n{success_criteria}\nWe attempted this ({language}):\n{last_command}\nResult:\nSTDOUT:\n{stdout[:2000]}",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nSUBTASK:\n{subtask_desc}\nSUCCESS CRITERIA:\n{success_criteria}\nWe attempted this ({language}):\n{last_command}\nResult:\nSTDOUT:\n{stdout[:1500]}",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1310,7 +1318,7 @@
         "kind": 5,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nUSER GOAL:\n{goal}\nGLOBAL SUCCESS CRITERIA FOR WHOLE GOAL:\n{global_success}\nSUBTASK RESULTS:\n{results_json_str}\nWrite a final message for the user:\n- Summarize what we actually did on the machine.\n- Mention important file paths found.",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nUSER GOAL:\n{goal}\nGLOBAL SUCCESS CRITERIA:\n{global_success}\nSUBTASK RESULTS:\n{summary_json}\nWrite a clear final response:\n- Explain what the agent actually did.\n- Mention important file paths.",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1319,7 +1327,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def plan_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Call Gemini planner to produce subtasks + success criteria.\n    Initialize cursor/attempt/etc.\n    Also open a 'plan_tasks' child span in LangSmith.\n    \"\"\"\n    parent_id = state.get(\"parent_run_id\")\n    plan_span = ls_start_run(\n        name=\"plan_tasks\",\n        run_type=\"llm\",",
+        "peekOfCode": "def plan_node(state: AgentState) -> AgentState:\n    parent_id = state.get(\"parent_run_id\")\n    span = ls_start_run(\n        name=\"plan_tasks\",\n        run_type=\"llm\",\n        inputs={\"goal\": state[\"goal\"], \"base_dir\": state[\"base_dir\"]},\n        parent_run_id=parent_id,\n    )\n    plan = plan_tasks(\n        chat_history=state[\"chat_history\"],",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1328,7 +1336,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def execute_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Execute the current subtask command/script.\n    Increment attempt.\n    Trace child span 'execute'.\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0) + 1  \n    if cursor < 0 or cursor >= len(subtasks):",
+        "peekOfCode": "def execute_node(state: AgentState) -> AgentState:\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0) + 1\n    base_dir = state.get(\"base_dir\", os.getcwd())\n    if cursor < 0 or cursor >= len(subtasks):\n        return {\"attempt\": attempt, \"last_stdout\": \"\", \"last_stderr\": \"\"}\n    st = subtasks[cursor]\n    lang = st.get(\"language\", \"cmd\")\n    cmd = st.get(\"command\", \"\")",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1337,7 +1345,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def verify_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Ask Gemini if success criteria was met.\n    If yes, append a success entry into results_for_final.\n    Trace child span 'verify'.\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    results = state.get(\"results_for_final\", [])",
+        "peekOfCode": "def verify_node(state: AgentState) -> AgentState:\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    results = state.get(\"results_for_final\", [])\n    if cursor < 0 or cursor >= len(subtasks):\n        return {\n            \"last_success\": True,\n            \"last_reason\": \"No subtask at cursor.\",\n            \"results_for_final\": results,",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1346,7 +1354,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def route_after_verify_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Decide next route:\n    - success -> next subtask or finalize\n    - fail but retries left -> repair_subtask\n    - fail and retries done -> record failure and move on or finalize\n    We set state[\"route\"] to \"execute\", \"repair_subtask\", or \"finalize\".\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)",
+        "peekOfCode": "def route_after_verify_node(state: AgentState) -> AgentState:\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    max_retries = state.get(\"max_retries\", 3)\n    results = state.get(\"results_for_final\", [])\n    ok = state.get(\"last_success\", False)\n    if cursor < 0 or cursor >= len(subtasks):\n        return {\"route\": \"finalize\", \"cursor\": cursor, \"attempt\": attempt,\n                \"results_for_final\": results}",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1355,7 +1363,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def route_router(state: AgentState) -> str:\n    \"\"\"\n    Tiny router fn that LangGraph calls. Must return\n    'execute', 'repair_subtask', or 'finalize'.\n    \"\"\"\n    return state.get(\"route\", \"finalize\")\ndef repair_subtask_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Ask Gemini to fix the command for current subtask.\n    Update that subtask's language/command.",
+        "peekOfCode": "def route_router(state: AgentState) -> str:\n    return state.get(\"route\", \"finalize\")\ndef repair_subtask_node(state: AgentState) -> AgentState:\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    if cursor < 0 or cursor >= len(subtasks):\n        return {}\n    st = subtasks[cursor]\n    # Only repair cmd/python; llm_file is conceptual",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1364,7 +1372,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def repair_subtask_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Ask Gemini to fix the command for current subtask.\n    Update that subtask's language/command.\n    Trace 'repair_subtask' span.\n    \"\"\"\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    if cursor < 0 or cursor >= len(subtasks):",
+        "peekOfCode": "def repair_subtask_node(state: AgentState) -> AgentState:\n    subtasks = state.get(\"subtasks\", [])\n    cursor = state.get(\"cursor\", 0)\n    attempt = state.get(\"attempt\", 0)\n    if cursor < 0 or cursor >= len(subtasks):\n        return {}\n    st = subtasks[cursor]\n    # Only repair cmd/python; llm_file is conceptual\n    if st.get(\"language\") not in (\"cmd\", \"python\"):\n        return {}",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1373,7 +1381,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def finalize_node(state: AgentState) -> AgentState:\n    \"\"\"\n    Summarize final result for the user.\n    Trace 'finalize' span.\n    \"\"\"\n    fin_span = ls_start_run(\n        name=\"finalize\",\n        run_type=\"llm\",\n        inputs={\n            \"goal\": state.get(\"goal\", \"\"),",
+        "peekOfCode": "def finalize_node(state: AgentState) -> AgentState:\n    span = ls_start_run(\n        name=\"finalize\",\n        run_type=\"llm\",\n        inputs={\n            \"goal\": state.get(\"goal\", \"\"),\n            \"base_dir\": state.get(\"base_dir\", \"\"),\n            \"global_success_criteria\": state.get(\"global_success_criteria\", \"\"),\n        },\n        parent_run_id=state.get(\"parent_run_id\"),",
         "detail": "agent.nodes",
         "documentation": {}
     },
