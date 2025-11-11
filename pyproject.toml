@@ -27,6 +27,7 @@ dependencies = [
     "wmi>=1.5.1; platform_system == 'Windows'",
     "screen-brightness-control>=0.21.0; platform_system == 'Windows'",
     "numpy>=2.3.4",
+    "tavily>=1.1.0",
 ]
 
 [project.optional-dependencies]
