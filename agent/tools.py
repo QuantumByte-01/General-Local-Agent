@@ -6,8 +6,8 @@ import psutil
 import platform
 from typing import Dict, Any, Tuple, List, Optional
 from pathlib import Path
-
-from .gemini_client import ask_gemini_raw
+from tavily import TavilyClient
+from google import genai
 
 # Optional deps
 try:
@@ -676,3 +676,81 @@ def run_tool_step(step: Dict[str, Any]) -> Dict[str, Any]:
             "stdout": "",
             "stderr": f"Unknown tool type: {tool}",
         }
+
+def web_search(query: str, context: str = "", num_results: int = 5) -> str:
+    """
+    Performs a context-aware web search:
+      - Queries Tavily for relevant pages
+      - Summarizes and filters results via Gemini (using a separate summarizer key)
+
+    Args:
+        query: search query string
+        context: optional context or user goal
+        num_results: number of top pages to consider
+
+    Returns:
+        Summarized relevant findings as text.
+    """
+    try:
+        tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
+        if not tavily_key:
+            return "[Web search error: TAVILY_API_KEY not set in environment]"
+
+        client = TavilyClient(api_key=tavily_key)
+        results = client.search(query=query, max_results=num_results)
+
+        if not results or "results" not in results or not results["results"]:
+            return f"No results found for '{query}'."
+
+        snippets = []
+        source_links = []
+        for r in results["results"]:
+            url = r.get("url", "")
+            title = r.get("title", "")
+            content = (r.get("content", "") or "")[:1500]
+            if url:
+                source_links.append(url)
+            snippets.append(f"Title: {title}\nURL: {url}\nContent:\n{content}\n---")
+
+        search_summary_prompt = f"""
+You are a summarization agent with access to multiple web search results.
+
+USER GOAL / CONTEXT:
+{context}
+
+QUERY:
+{query}
+
+Here are the top results:
+----------------
+{chr(10).join(snippets)}
+----------------
+
+Please synthesize a concise, well-organized summary:
+- Include the most relevant information only.
+- Mention key findings or facts.
+- Add 2–4 key URLs inline.
+- Avoid repetition or generic filler.
+Return only the final readable summary.
+"""
+
+        summarizer_key = os.getenv("GEMINI_SUMMARIZER_KEY", "").strip()
+        if not summarizer_key:
+            return "[Web search error: GEMINI_SUMMARIZER_KEY not set in environment]"
+
+        gemini_client = genai.Client(api_key=summarizer_key)
+        response = gemini_client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=search_summary_prompt,
+        )
+
+        sources = ""
+        if source_links:
+            sources = "\n\nSources:\n" + "\n".join(f"- {url}" for url in source_links[:5])
+
+        summary = getattr(response, "text", str(response)).strip()
+        return summary+sources or "[Web search error: empty summary returned]"
+
+    except Exception as e:
+        print("Error in web_search:", e)
+        return f"[Web search error: {e}]"
