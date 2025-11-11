@@ -2,6 +2,7 @@ import os
 import subprocess
 import tempfile
 from typing import Dict, Any, List, Optional
+from .tools import web_search
 
 from .state import AgentState, ls_start_run, ls_end_run
 from .llm import (
@@ -248,6 +249,11 @@ def _exec_once(
             file_pattern=file_pattern,
             user_prompt=user_prompt,
         )
+    if language == "web_search":
+        query = subtask.get("query", command or subtask.get("description", ""))
+        context = subtask.get("description", "")
+        summary = web_search(query=query, context=context)
+        return {"returncode": 0, "stdout": summary, "stderr": ""}
     # default: cmd
     return _run_cmd_once(command)
 
