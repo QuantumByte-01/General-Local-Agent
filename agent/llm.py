@@ -3,6 +3,8 @@ import json
 from typing import Any, Dict, List
 from google import genai
 
+
+
 #
 # --- Gemini client helpers ---
 #
@@ -90,7 +92,7 @@ def plan_tasks(
     base_dir: str
 ) -> Dict[str, Any]:
     """
-    Planner can now emit three kinds of subtasks:
+    Planner can now emit four kinds of subtasks:
 
     1) Shell command:
        {
@@ -129,6 +131,23 @@ def plan_tasks(
         - read or extract content (CSV/TXT/PDF)
         - call Gemini with the prompt + content snippet
         - print the LLM answer as stdout.
+    
+    4) Web search tool (NEW):
+        {
+         "id": 4,
+         "description": "Find the latest information about Tesla earnings",
+         "success_criteria": "stdout must list relevant links and short summaries.",
+         "language": "web_search",
+         "query": "latest Tesla earnings report"
+       }
+
+       For web_search:
+         - query: the search query string to use.
+         The node will:
+           - perform a DuckDuckGo or Tavily search
+           - retrieve up to N results (default 5)
+           - summarize and format each with title, snippet, and URL
+           - print the summarized results as stdout.
     """
 
     chat_context = _format_chat_history(chat_history)
@@ -150,10 +169,11 @@ OUTPUT FORMAT (ONLY VALID JSON):
       "id": 1,
       "description": "string",
       "success_criteria": "string",
-      "language": "cmd" | "python" | "llm_file",
+      "language": "cmd" | "python" | "llm_file" | "web_search",
       "command": "string (for cmd/python only)",
       "file_pattern": "optional, for llm_file",
-      "prompt": "optional, for llm_file"
+      "prompt": "optional, for llm_file",
+      "query": "optional, for web_search"
     }},
     ...
   ]
@@ -191,12 +211,24 @@ INTERPRETATION:
        * call the LLM with (prompt + file content),
        * return that answer via stdout.
 
+4) language="web_search" (NEW):
+   - Use when the user asks for current or online information,
+     e.g. "latest AI news", "recent Tesla earnings", "top YouTube trends".
+   - Fields:
+       * query: required. The web search query string.
+   - The runtime will:
+       * perform a Tavily or DuckDuckGo search (max 5 results)
+       * summarize results for relevance
+       * return concise findings via stdout.
+   - Use this when the needed data is *not* available locally.
+       
 SUCCESS CRITERIA:
 - For every subtask, success_criteria must reference what we should see in stdout/stderr.
 - Examples:
     "stdout must list at least one matching path"
     "stdout must contain 5 CSV rows and the file path"
     "stdout must be a summary of the PDF sections"
+    "stdout must list relevant links and summaries from online sources"
 
 CHAT HISTORY:
 {chat_context}
@@ -243,16 +275,21 @@ Return ONLY the JSON object, no extra commentary.
         cmd = (st.get("command", "") or "").strip()
         file_pattern = (st.get("file_pattern", "") or "").strip()
         llm_prompt = (st.get("prompt", "") or "").strip()
+        query = (st.get("query", "") or "").strip()
 
-        if lang not in ("cmd", "python", "llm_file"):
+        # Validate language
+        if lang not in ("cmd", "python", "llm_file", "web_search"):
             lang = "cmd"
 
-        # basic validation
+        # Validate fields
         if lang in ("cmd", "python") and not cmd:
             continue
         if lang == "llm_file" and (not file_pattern or not llm_prompt):
             continue
+        if lang == "web_search" and not query:
+            continue
 
+        # Build clean entry
         entry = {
             "id": sid,
             "description": desc,
@@ -262,9 +299,11 @@ Return ONLY the JSON object, no extra commentary.
 
         if lang in ("cmd", "python"):
             entry["command"] = cmd
-        if lang == "llm_file":
+        elif lang == "llm_file":
             entry["file_pattern"] = file_pattern
             entry["prompt"] = llm_prompt
+        elif lang == "web_search":
+            entry["query"] = query
 
         cleaned.append(entry)
 
