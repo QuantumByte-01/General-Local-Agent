@@ -8,6 +8,7 @@ from typing import Dict, Any, Tuple, List, Optional
 from pathlib import Path
 from tavily import TavilyClient
 from google import genai
+from .gemini_client import ask_gemini_raw
 
 # Optional deps
 try:
