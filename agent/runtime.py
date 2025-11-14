@@ -1,6 +1,50 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Any
 from .state import AgentState, ls_start_run, ls_end_run
 from .graph import build_agent_graph
+from .llm import plan_tasks
+
+
+def _format_plan_summary(plan: Dict[str, Any]) -> str:
+    subtasks = plan.get("subtasks", []) or []
+    lines = []
+    global_success = plan.get("global_success_criteria", "").strip()
+    if global_success:
+        lines.append(f"Global success criteria: {global_success}")
+        lines.append("")
+
+    if not subtasks:
+        lines.append("No concrete subtasks were generated.")
+    else:
+        lines.append("Planned subtasks:")
+        for st in subtasks:
+            sid = st.get("id", "?")
+            desc = (st.get("description", "") or "").strip()
+            lang = (st.get("language", "") or "").strip()
+            crit = (st.get("success_criteria", "") or "").strip()
+            details = []
+            if lang:
+                details.append(f"mode={lang}")
+            if crit:
+                details.append(f"criteria={crit}")
+            detail_str = f" ({'; '.join(details)})" if details else ""
+            lines.append(f"- Step {sid}: {desc}{detail_str}")
+
+    lines.append("")
+    lines.append("Reply with yes to run these steps or no to cancel / modify.")
+    return "\n".join(lines).strip()
+
+
+def generate_plan_preview(
+    goal: str,
+    chat_history: List[Dict[str, str]],
+    base_dir: str,
+) -> Tuple[Dict[str, Any], str]:
+    plan = plan_tasks(
+        chat_history=chat_history,
+        goal=goal,
+        base_dir=base_dir,
+    )
+    return plan, _format_plan_summary(plan)
 
 
 def run_agent_once(
@@ -8,8 +52,8 @@ def run_agent_once(
     chat_history: List[Dict[str, str]],
     base_dir: str,
     max_retries: int = 3,
+    existing_plan: Dict[str, Any] = None,
 ) -> Tuple[str, str]:
-  
 
     parent_span = ls_start_run(
         name="LangGraph",
@@ -31,6 +75,12 @@ def run_agent_once(
         "max_retries": max_retries,
         "parent_run_id": parent_span.get("run_id"),
     }
+
+    if existing_plan:
+        init_state.update({
+            "plan": existing_plan,
+            "preplanned": True,
+        })
 
     final_state: AgentState = graph.invoke(init_state)
 

@@ -61,8 +61,8 @@ class AgentState(TypedDict, total=False):
     global_success_criteria: str
 
     # Progress
-    cursor: int          # which subtask index we're on
-    attempt: int         # how many attempts for current subtask
+    cursor: int          
+    attempt: int        
     max_retries: int
 
     # Last execution attempt info
@@ -80,3 +80,6 @@ class AgentState(TypedDict, total=False):
 
     # LangSmith parent
     parent_run_id: str
+
+    # Flags
+    preplanned: bool

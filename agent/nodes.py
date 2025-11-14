@@ -265,6 +265,24 @@ def _exec_once(
 def plan_node(state: AgentState) -> AgentState:
     parent_id = state.get("parent_run_id")
 
+    if state.get("preplanned"):
+        plan = state.get("plan", {}) or {}
+        subtasks = plan.get("subtasks", [])
+        return {
+            "plan": plan,
+            "subtasks": subtasks,
+            "global_success_criteria": plan.get("global_success_criteria", ""),
+            "cursor": 0,
+            "attempt": 0,
+            "results_for_final": [],
+            "last_stdout": "",
+            "last_stderr": "",
+            "last_reason": "",
+            "last_success": False,
+            "route": "",
+            "preplanned": False,
+        }
+
     span = ls_start_run(
         name="plan_tasks",
         run_type="llm",

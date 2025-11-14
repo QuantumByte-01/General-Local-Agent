@@ -1,44 +1,98 @@
 import os
 import json
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional, Sequence
 from google import genai
 
+
+DEFAULT_MODEL_PREFS = [
+    "gemini-2.5-pro",
+    "gemini-2.5-flash",
+    "gemini-2.5-pro-exp-0801",
+    "gemini-1.5-flash",
+]
 
 
 #
 # --- Gemini client helpers ---
 #
 
-def _get_client():
-    """
-    Build Gemini client from GEMINI_API_KEY in .env.
-    """
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        return genai.Client()
-    try:
-        return genai.Client(api_key=api_key)
-    except TypeError:
-        # Some SDKs auto-read env, ignore mismatch
-        return genai.Client()
+def _split_env_list(value: str) -> List[str]:
+    tokens = []
+    for part in value.replace(";", ",").split(","):
+        part = part.strip()
+        if part:
+            tokens.append(part)
+    return tokens
 
 
-def ask_gemini_raw(prompt: str) -> str:
+def _resolve_api_keys(preferred_envs: Sequence[str]) -> List[str]:
+    for env in preferred_envs:
+        if not env:
+            continue
+        raw = os.getenv(env, "")
+        keys = _split_env_list(raw)
+        if keys:
+            return keys
+    return [""]
+
+
+def _resolve_model_list(preferred_envs: Sequence[str], fallback: Optional[List[str]] = None) -> List[str]:
+    for env in preferred_envs:
+        if not env:
+            continue
+        raw = os.getenv(env, "")
+        models = _split_env_list(raw)
+        if models:
+            return models
+    return fallback or DEFAULT_MODEL_PREFS
+
+
+def _build_client(api_key: Optional[str]):
     """
-    Send a pure-text prompt to Gemini 2.5 Flash and get response.text.
+    Build Gemini client with an optional explicit key.
     """
-    try:
-        client = _get_client()
-        resp = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-        )
+    key = (api_key or "").strip()
+    if not key:
         try:
-            return resp.text
-        except Exception:
-            return str(resp)
-    except Exception as e:
-        return f"[LLM call failed: {e}]"
+            return genai.Client()
+        except TypeError:
+            return genai.Client()
+    return genai.Client(api_key=key)
+
+
+def ask_gemini_raw(
+    prompt: str,
+    key_envs: Optional[Sequence[str]] = None,
+    model_envs: Optional[Sequence[str]] = None,
+) -> str:
+    """
+    Send a pure-text prompt to Gemini using multiple keys/models if needed.
+    """
+    key_candidates = key_envs or ["GEMINI_API_KEY"]
+    model_candidates = model_envs or ["GEMINI_MODEL_PREFERENCE", "GEMINI_MODELS"]
+    api_keys = _resolve_api_keys(key_candidates)
+    models = _resolve_model_list(model_candidates, DEFAULT_MODEL_PREFS)
+
+    errors = []
+    for key_index, api_key in enumerate(api_keys, start=1):
+        try:
+            client = _build_client(api_key)
+        except Exception as client_error:
+            errors.append(f"client init key#{key_index}: {client_error}")
+            continue
+        for model in models:
+            try:
+                resp = client.models.generate_content(
+                    model=model,
+                    contents=prompt,
+                )
+                return getattr(resp, "text", str(resp))
+            except Exception as e:
+                errors.append(f"{model} (key#{key_index}): {e}")
+                continue
+    joined = "; ".join(errors) if errors else "unknown error"
+    return f"[LLM call failed after retries: {joined[:500]}]"
 
 
 #
@@ -80,6 +134,112 @@ def _format_chat_history(history: List[Dict[str, str]], limit: int = 8) -> str:
         content = msg.get("content", "").strip()
         lines.append(f"{role}: {content}")
     return "\n".join(lines)
+
+
+def _looks_like_web_search(text: str) -> bool:
+    lowered = text.lower()
+    if not lowered:
+        return False
+    keywords = [
+        "search the web",
+        "web search",
+        "search online",
+        "look up online",
+        "latest information",
+        "recent information",
+        "look online",
+        "internet search",
+        "find results",
+    ]
+    if any(kw in lowered for kw in keywords):
+        return True
+    return "search" in lowered and "web" in lowered
+
+
+def _extract_file_hint(text: str) -> Optional[str]:
+    if not text:
+        return None
+    quoted = re.search(r"[\"'`“”]([^\"'`“”]+)[\"'`“”]", text)
+    if quoted:
+        candidate = quoted.group(1).strip()
+        if candidate:
+            return candidate
+    match = re.search(
+        r"file\s+(?:named|called)?\s*([A-Za-z0-9_\-. ]+)",
+        text,
+        re.IGNORECASE,
+    )
+    if match:
+        candidate = match.group(1).strip().strip(".,:;!?")
+        if candidate:
+            return candidate
+    return None
+
+
+def _needs_file_metadata(text: str) -> Optional[str]:
+    lowered = text.lower()
+    if not lowered or "file" not in lowered:
+        return None
+    if "size" in lowered and ("modified" in lowered or "last updated" in lowered):
+        return _extract_file_hint(text)
+    if "metadata" in lowered and ("modified" in lowered or "size" in lowered):
+        return _extract_file_hint(text)
+    return None
+
+
+def _build_file_metadata_script(base_dir: str, file_hint: str) -> str:
+    base_literal = json.dumps(base_dir)
+    hint_literal = json.dumps(file_hint)
+    return (
+        "import os\n"
+        "import json\n"
+        "from datetime import datetime\n"
+        f"base_dir = {base_literal}\n"
+        f"needle = {hint_literal}.lower()\n"
+        "matches = []\n"
+        "for root, _dirs, files in os.walk(base_dir):\n"
+        "    for name in files:\n"
+        "        if needle in name.lower():\n"
+        "            path = os.path.join(root, name)\n"
+        "            stat = os.stat(path)\n"
+        "            matches.append({\n"
+        "                'path': path,\n"
+        "                'name': name,\n"
+        "                'size_bytes': stat.st_size,\n"
+        "                'file_type': os.path.splitext(name)[1] or 'unknown',\n"
+        "                'modified': datetime.fromtimestamp(stat.st_mtime).isoformat(),\n"
+        "            })\n"
+        "if not matches:\n"
+        "    print(f\"No files matching '{needle}' were found under {base_dir}.\")\n"
+        "else:\n"
+        "    for info in matches:\n"
+        "        print(json.dumps(info, indent=2))\n"
+    )
+
+
+def _postprocess_subtask(entry: Dict[str, Any], base_dir: str) -> Dict[str, Any]:
+    desc = (entry.get("description", "") or "").strip()
+    lang = (entry.get("language", "") or "").strip().lower()
+    command = (entry.get("command", "") or "").strip()
+    if lang in ("cmd", "python") and _looks_like_web_search(desc):
+        new_entry = dict(entry)
+        new_entry["language"] = "web_search"
+        new_entry.pop("command", None)
+        new_entry["query"] = desc or command
+        if not new_entry.get("success_criteria"):
+            new_entry["success_criteria"] = "stdout must summarize relevant online results."
+        return new_entry
+
+    file_hint = _needs_file_metadata(desc)
+    if lang in ("cmd", "python") and file_hint:
+        new_entry = dict(entry)
+        new_entry["language"] = "python"
+        new_entry["command"] = _build_file_metadata_script(base_dir, file_hint)
+        if not new_entry.get("success_criteria"):
+            new_entry["success_criteria"] = "stdout must show file size/type/modified timestamp."
+        return new_entry
+
+    return entry
 
 
 #
@@ -148,6 +308,17 @@ def plan_tasks(
            - retrieve up to N results (default 5)
            - summarize and format each with title, snippet, and URL
            - print the summarized results as stdout.
+
+    DOMAINS THE PLAN MUST COVER WITHOUT SPECIALIZED EXTERNAL TOOLS:
+    - File/folder/document intelligence (create, copy, move, rename, delete, compress/extract,
+      inspect metadata, classify files, semantic search, deduplicate, summarize and compare documents,
+      detect plagiarism using local comparisons, cross-document Q&A).
+    - System configuration & optimization (CPU/RAM stats, network/power/battery info, running processes,
+      adjust screen brightness/wallpaper with PowerShell, suggest large files/apps to delete, report storage usage).
+    - Developer workflow automation (code generation, auto-formatting via built-in formatters,
+      git clone/commit/push/pull, documentation synthesis, code refactor suggestions, data visualizations,
+      conversational code-review summaries).
+    Use only Windows shell commands, git, Python stdlib/pandas/psutil, and the llm_file reader—no extra bespoke tools.
     """
 
     chat_context = _format_chat_history(chat_history)
@@ -155,10 +326,27 @@ def plan_tasks(
     planner_prompt = f"""
 You are the PLANNER for a local Windows + LLM agent.
 
+Core capabilities (no external specialized tools allowed):
+- File/folder/document work: create/move/copy/delete/compress/extract, rename, inspect metadata,
+  classify files, search or deduplicate folders, summarize or compare documents, detect plagiarism,
+  answer cross-document questions, and perform semantic searches over text/CSV/PDF/image assets.
+- System configuration & optimization: show CPU/RAM/disk/network/battery stats, read running processes,
+  adjust screen brightness or wallpaper via PowerShell, inspect power plans, and list large files/apps
+  to reclaim storage.
+- Developer automation: generate or refactor source files, auto-format or lint using built-in formatters,
+  run git clone/commit/push/pull, document APIs from code, plot/visualize project data, and summarize code reviews.
+Use Windows shell commands, git, Python stdlib (plus built-in modules like os, pathlib, csv, json, shutil, zipfile,
+pandas, psutil, wmi, screen_brightness_control), and the llm_file reader. Prefer python when structured output is needed.
+
 AGENT_BASE_DIR = "{base_dir}"
 
 You receive a USER_GOAL and recent chat history.
 You must break the goal into 1..6 ordered subtasks.
+- Default to 2-6 steps. Only use a single step when the task is truly trivial
+  (e.g., "list this folder" or "echo this string").
+- For anything involving analysis, document changes, automation, or online searches,
+  include distinct plan/execute/verify or gather/analyze/report phases so the agent
+  can handle complex tasks reliably.
 
 OUTPUT FORMAT (ONLY VALID JSON):
 
@@ -229,6 +417,8 @@ SUCCESS CRITERIA:
     "stdout must contain 5 CSV rows and the file path"
     "stdout must be a summary of the PDF sections"
     "stdout must list relevant links and summaries from online sources"
+- When unsure whether earlier steps succeeded, add a follow-up verification
+  subtask (often a small python script) before finalizing.
 
 CHAT HISTORY:
 {chat_context}
@@ -310,12 +500,14 @@ Return ONLY the JSON object, no extra commentary.
     if not cleaned:
         cleaned = fallback["subtasks"]
 
+    enhanced = [_postprocess_subtask(entry, base_dir) for entry in cleaned]
+
     return {
         "global_success_criteria": data.get(
             "global_success_criteria",
             "We produced useful output."
         ),
-        "subtasks": cleaned,
+        "subtasks": enhanced,
     }
 
 

@@ -321,6 +321,14 @@
         "documentation": {}
     },
     {
+        "label": "generate_plan_preview",
+        "importPath": "agent.runtime",
+        "description": "agent.runtime",
+        "isExtraImport": true,
+        "detail": "agent.runtime",
+        "documentation": {}
+    },
+    {
         "label": "StateGraph",
         "importPath": "langgraph.graph",
         "description": "langgraph.graph",
@@ -346,6 +354,15 @@
         "documentation": {}
     },
     {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
         "label": "Any",
         "importPath": "typing",
         "description": "typing",
@@ -363,6 +380,22 @@
     },
     {
         "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Sequence",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -419,6 +452,14 @@
     },
     {
         "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -529,6 +570,14 @@
         "description": "pathlib",
         "isExtraImport": true,
         "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "TavilyClient",
+        "importPath": "tavily",
+        "description": "tavily",
+        "isExtraImport": true,
+        "detail": "tavily",
         "documentation": {}
     },
     {
@@ -1255,7 +1304,7 @@
         "kind": 2,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "def ask_gemini_raw(prompt: str) -> str:\n    \"\"\"\n    Send a pure-text prompt to Gemini 2.5 Flash and get response.text.\n    \"\"\"\n    try:\n        client = _get_client()\n        resp = client.models.generate_content(\n            model=\"gemini-2.5-flash\",\n            contents=prompt,\n        )",
+        "peekOfCode": "def ask_gemini_raw(\n    prompt: str,\n    key_envs: Optional[Sequence[str]] = None,\n    model_envs: Optional[Sequence[str]] = None,\n) -> str:\n    \"\"\"\n    Send a pure-text prompt to Gemini using multiple keys/models if needed.\n    \"\"\"\n    key_candidates = key_envs or [\"GEMINI_API_KEY\"]\n    model_candidates = model_envs or [\"GEMINI_MODEL_PREFERENCE\", \"GEMINI_MODELS\"]",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1264,7 +1313,7 @@
         "kind": 2,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "def plan_tasks(\n    chat_history: List[Dict[str, str]],\n    goal: str,\n    base_dir: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Planner can now emit three kinds of subtasks:\n    1) Shell command:\n       {\n         \"id\": 1,",
+        "peekOfCode": "def plan_tasks(\n    chat_history: List[Dict[str, str]],\n    goal: str,\n    base_dir: str\n) -> Dict[str, Any]:\n    \"\"\"\n    Planner can now emit four kinds of subtasks:\n    1) Shell command:\n       {\n         \"id\": 1,",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1296,11 +1345,20 @@
         "documentation": {}
     },
     {
+        "label": "DEFAULT_MODEL_PREFS",
+        "kind": 5,
+        "importPath": "agent.llm",
+        "description": "agent.llm",
+        "peekOfCode": "DEFAULT_MODEL_PREFS = [\n    \"gemini-2.5-pro\",\n    \"gemini-2.5-flash\",\n    \"gemini-2.5-pro-exp-0801\",\n    \"gemini-1.5-flash\",\n]\n#\n# --- Gemini client helpers ---\n#\ndef _split_env_list(value: str) -> List[str]:",
+        "detail": "agent.llm",
+        "documentation": {}
+    },
+    {
         "label": "AGENT_BASE_DIR",
         "kind": 5,
         "importPath": "agent.llm",
         "description": "agent.llm",
-        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nYou receive a USER_GOAL and recent chat history.\nYou must break the goal into 1..6 ordered subtasks.\nOUTPUT FORMAT (ONLY VALID JSON):\n{{\n  \"global_success_criteria\": \"string\",\n  \"subtasks\": [\n    {{\n      \"id\": 1,\n      \"description\": \"string\",",
+        "peekOfCode": "AGENT_BASE_DIR = \"{base_dir}\"\nYou receive a USER_GOAL and recent chat history.\nYou must break the goal into 1..6 ordered subtasks.\n- Default to 2-6 steps. Only use a single step when the task is truly trivial\n  (e.g., \"list this folder\" or \"echo this string\").\n- For anything involving analysis, document changes, automation, or online searches,\n  include distinct plan/execute/verify or gather/analyze/report phases so the agent\n  can handle complex tasks reliably.\nOUTPUT FORMAT (ONLY VALID JSON):\n{{",
         "detail": "agent.llm",
         "documentation": {}
     },
@@ -1327,7 +1385,7 @@
         "kind": 2,
         "importPath": "agent.nodes",
         "description": "agent.nodes",
-        "peekOfCode": "def plan_node(state: AgentState) -> AgentState:\n    parent_id = state.get(\"parent_run_id\")\n    span = ls_start_run(\n        name=\"plan_tasks\",\n        run_type=\"llm\",\n        inputs={\"goal\": state[\"goal\"], \"base_dir\": state[\"base_dir\"]},\n        parent_run_id=parent_id,\n    )\n    plan = plan_tasks(\n        chat_history=state[\"chat_history\"],",
+        "peekOfCode": "def plan_node(state: AgentState) -> AgentState:\n    parent_id = state.get(\"parent_run_id\")\n    if state.get(\"preplanned\"):\n        plan = state.get(\"plan\", {}) or {}\n        subtasks = plan.get(\"subtasks\", [])\n        return {\n            \"plan\": plan,\n            \"subtasks\": subtasks,\n            \"global_success_criteria\": plan.get(\"global_success_criteria\", \"\"),\n            \"cursor\": 0,",
         "detail": "agent.nodes",
         "documentation": {}
     },
@@ -1386,11 +1444,20 @@
         "documentation": {}
     },
     {
+        "label": "generate_plan_preview",
+        "kind": 2,
+        "importPath": "agent.runtime",
+        "description": "agent.runtime",
+        "peekOfCode": "def generate_plan_preview(\n    goal: str,\n    chat_history: List[Dict[str, str]],\n    base_dir: str,\n) -> Tuple[Dict[str, Any], str]:\n    plan = plan_tasks(\n        chat_history=chat_history,\n        goal=goal,\n        base_dir=base_dir,\n    )",
+        "detail": "agent.runtime",
+        "documentation": {}
+    },
+    {
         "label": "run_agent_once",
         "kind": 2,
         "importPath": "agent.runtime",
         "description": "agent.runtime",
-        "peekOfCode": "def run_agent_once(\n    goal: str,\n    chat_history: List[Dict[str, str]],\n    base_dir: str,\n    max_retries: int = 3,\n) -> Tuple[str, str]:\n    parent_span = ls_start_run(\n        name=\"LangGraph\",\n        run_type=\"chain\",\n        inputs={",
+        "peekOfCode": "def run_agent_once(\n    goal: str,\n    chat_history: List[Dict[str, str]],\n    base_dir: str,\n    max_retries: int = 3,\n    existing_plan: Dict[str, Any] = None,\n) -> Tuple[str, str]:\n    parent_span = ls_start_run(\n        name=\"LangGraph\",\n        run_type=\"chain\",",
         "detail": "agent.runtime",
         "documentation": {}
     },
@@ -1485,11 +1552,20 @@
         "documentation": {}
     },
     {
+        "label": "web_search",
+        "kind": 2,
+        "importPath": "agent.tools",
+        "description": "agent.tools",
+        "peekOfCode": "def web_search(query: str, context: str = \"\", num_results: int = 5) -> str:\n    \"\"\"\n    Performs a context-aware web search with Tavily first, then DuckDuckGo fallback.\n    \"\"\"\n    errors = []\n    snippets = []\n    source_links = []\n    tavily_results, err = _tavily_search(query, num_results)\n    if err:\n        errors.append(err)",
+        "detail": "agent.tools",
+        "documentation": {}
+    },
+    {
         "label": "agent_turn",
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def agent_turn(user_msg: str, history: list, session_state: dict):\n    if not session_state or session_state.get(\"session_id\") is None:\n        session_state = {\"session_id\": str(uuid.uuid4())}\n    convo_history = history + [{\"role\": \"user\", \"content\": user_msg}]\n    base_dir = os.getenv(\n        \"AGENT_BASE_DIR\"\n    )\n    final_answer, _debug_info = run_agent_once(\n        goal=user_msg,\n        chat_history=convo_history,",
+        "peekOfCode": "def agent_turn(user_msg: str, history: list, session_state: dict):\n    if not session_state or session_state.get(\"session_id\") is None:\n        session_state = {\"session_id\": str(uuid.uuid4())}\n    convo_history = history + [{\"role\": \"user\", \"content\": user_msg}]\n    base_dir = os.getenv(\n        \"AGENT_BASE_DIR\"\n    )\n    pending_plan = session_state.get(\"pending_plan\")\n    pending_goal = session_state.get(\"pending_goal\")\n    if pending_plan:",
         "detail": "app",
         "documentation": {}
     },

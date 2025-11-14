@@ -7,8 +7,12 @@ import platform
 from typing import Dict, Any, Tuple, List, Optional
 from pathlib import Path
 from tavily import TavilyClient
-from google import genai
 from .llm import ask_gemini_raw
+
+try:
+    from duckduckgo_search import DDGS
+except ImportError:
+    DDGS = None
 
 # Optional deps
 try:
@@ -678,42 +682,17 @@ def run_tool_step(step: Dict[str, Any]) -> Dict[str, Any]:
             "stderr": f"Unknown tool type: {tool}",
         }
 
-def web_search(query: str, context: str = "", num_results: int = 5) -> str:
-    """
-    Performs a context-aware web search:
-      - Queries Tavily for relevant pages
-      - Summarizes and filters results via Gemini (using a separate summarizer key)
+def _summarize_search_results(
+    query: str,
+    context: str,
+    snippets: List[str],
+    source_links: List[str],
+) -> str:
+    if not snippets:
+        return f"No results found for '{query}'."
 
-    Args:
-        query: search query string
-        context: optional context or user goal
-        num_results: number of top pages to consider
-
-    Returns:
-        Summarized relevant findings as text.
-    """
-    try:
-        tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
-        if not tavily_key:
-            return "[Web search error: TAVILY_API_KEY not set in environment]"
-
-        client = TavilyClient(api_key=tavily_key)
-        results = client.search(query=query, max_results=num_results)
-
-        if not results or "results" not in results or not results["results"]:
-            return f"No results found for '{query}'."
-
-        snippets = []
-        source_links = []
-        for r in results["results"]:
-            url = r.get("url", "")
-            title = r.get("title", "")
-            content = (r.get("content", "") or "")[:1500]
-            if url:
-                source_links.append(url)
-            snippets.append(f"Title: {title}\nURL: {url}\nContent:\n{content}\n---")
-
-        search_summary_prompt = f"""
+    joined_snippets = "\n".join(snippets)
+    search_summary_prompt = f"""
 You are a summarization agent with access to multiple web search results.
 
 USER GOAL / CONTEXT:
@@ -724,34 +703,111 @@ QUERY:
 
 Here are the top results:
 ----------------
-{chr(10).join(snippets)}
+{joined_snippets}
 ----------------
 
 Please synthesize a concise, well-organized summary:
 - Include the most relevant information only.
 - Mention key findings or facts.
-- Add 2–4 key URLs inline.
+- Add 2-4 key URLs inline.
 - Avoid repetition or generic filler.
 Return only the final readable summary.
 """
 
-        summarizer_key = os.getenv("GEMINI_SUMMARIZER_KEY", "").strip()
-        if not summarizer_key:
-            return "[Web search error: GEMINI_SUMMARIZER_KEY not set in environment]"
+    summary = ask_gemini_raw(
+        search_summary_prompt,
+        key_envs=["GEMINI_SUMMARIZER_KEY", "GEMINI_API_KEY"],
+        model_envs=[
+            "GEMINI_SUMMARIZER_MODELS",
+            "GEMINI_MODEL_PREFERENCE",
+            "GEMINI_MODELS",
+        ],
+    )
 
-        gemini_client = genai.Client(api_key=summarizer_key)
-        response = gemini_client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=search_summary_prompt,
+    if summary.startswith("[LLM call failed"):
+        summary = (
+            "LLM summarization temporarily unavailable; showing raw snippets:\n\n"
+            + joined_snippets
         )
 
-        sources = ""
-        if source_links:
-            sources = "\n\nSources:\n" + "\n".join(f"- {url}" for url in source_links[:5])
+    sources = ""
+    if source_links:
+        sources = "\n\nSources:\n" + "\n".join(f"- {url}" for url in source_links[:5])
 
-        summary = getattr(response, "text", str(response)).strip()
-        return summary+sources or "[Web search error: empty summary returned]"
+    final_summary = summary.strip() or "[Web search error: empty summary returned]"
+    return final_summary + sources
 
+
+def _tavily_search(query: str, num_results: int):
+    tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
+    if not tavily_key:
+        return [], "TAVILY_API_KEY not set in environment."
+    try:
+        client = TavilyClient(api_key=tavily_key)
+        results = client.search(query=query, max_results=num_results)
+        return results.get("results", []), None
     except Exception as e:
-        print("Error in web_search:", e)
-        return f"[Web search error: {e}]"
+        return [], f"Tavily error: {e}"
+
+
+def _duckduckgo_search(query: str, num_results: int):
+    if DDGS is None:
+        return [], "duckduckgo-search package not available."
+    try:
+        with DDGS() as ddgs:
+            raw_results = list(
+                ddgs.text(
+                    query,
+                    region="wt-wt",
+                    safesearch="moderate",
+                    max_results=num_results,
+                )
+            )
+    except Exception as e:
+        return [], f"DuckDuckGo error: {e}"
+    normalized = []
+    for r in raw_results:
+        normalized.append(
+            {
+                "title": r.get("title", ""),
+                "url": r.get("href") or r.get("url", ""),
+                "content": r.get("body", r.get("snippet", "")),
+            }
+        )
+    return normalized, None
+
+
+def web_search(query: str, context: str = "", num_results: int = 5) -> str:
+    """
+    Performs a context-aware web search with Tavily first, then DuckDuckGo fallback.
+    """
+    errors = []
+    snippets = []
+    source_links = []
+
+    tavily_results, err = _tavily_search(query, num_results)
+    if err:
+        errors.append(err)
+
+    if tavily_results:
+        usable = tavily_results[:num_results]
+    else:
+        ddg_results, err = _duckduckgo_search(query, num_results)
+        if err:
+            errors.append(err)
+        usable = ddg_results[:num_results]
+
+    for r in usable:
+        url = r.get("url", "")
+        title = r.get("title", "")
+        content = (r.get("content", "") or "")[:800]
+        if url:
+            source_links.append(url)
+        snippets.append(f"Title: {title}\nURL: {url}\nContent:\n{content}\n---")
+
+    if not snippets:
+        if errors:
+            return "[Web search error: " + " | ".join(errors) + "]"
+        return f"No results found for '{query}'."
+
+    return _summarize_search_results(query, context, snippets, source_links)
