@@ -28,9 +28,8 @@ uv venv
 uv sync
 ```
 
+5. To start the application:
 
-
-
-## Features:
-
-a.
+```powershell
+uv run app.py
+```
