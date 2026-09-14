@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="640" viewBox="0 0 1100 640" role="img" aria-labelledby="title">
+  <title id="title">General Local Agent architecture</title>
+  <rect width="1100" height="640" fill="#f7f8fb"/>
+  <text x="550" y="36" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#1f2937">General Local Agent  architecture</text>
+
+  <rect x="40" y="60" width="110" height="54" rx="10" fill="#f3f4f6" stroke="#4b5563"/>
+  <text x="95" y="92" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">User</text>
+
+  <rect x="180" y="52" width="230" height="70" rx="10" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="295" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Gradio UI</text>
+  <text x="295" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#374151">chat · trace · permission mode</text>
+
+  <rect x="440" y="52" width="280" height="70" rx="10" fill="#fef3c7" stroke="#d97706"/>
+  <text x="580" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Bootstrap</text>
+  <text x="580" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#374151">env · skills · hooks snapshot · MCP</text>
+
+  <rect x="750" y="52" width="310" height="70" rx="10" fill="#fef3c7" stroke="#d97706"/>
+  <text x="905" y="80" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Two-tier state</text>
+  <text x="905" y="100" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#374151">SessionState (infra) + AppState (UI)</text>
+
+  <rect x="180" y="160" width="400" height="88" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="380" y="192" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Query loop (async generator)</text>
+  <text x="380" y="214" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1f2937">compact ’ model ’ tools ’ results ’ repeat</text>
+  <text x="380" y="232" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#4b5563">Terminal: completed · ask · max_turns · error</text>
+
+  <rect x="610" y="160" width="220" height="88" rx="10" fill="#ede9fe" stroke="#7c3aed"/>
+  <text x="720" y="194" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Gemini client</text>
+  <text x="720" y="214" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">sticky model latch</text>
+  <text x="720" y="230" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">slot 8K ’ 64K</text>
+
+  <rect x="850" y="160" width="210" height="88" rx="10" fill="#ede9fe" stroke="#7c3aed"/>
+  <text x="955" y="194" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">System prompt</text>
+  <text x="955" y="214" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">AGENT.md + memory</text>
+  <text x="955" y="230" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">skill menu (names only)</text>
+
+  <rect x="40" y="280" width="520" height="160" rx="12" fill="#ecfdf5" stroke="#059669"/>
+  <text x="56" y="304" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Tool system</text>
+  <rect x="56" y="318" width="150" height="52" rx="8" fill="#fff" stroke="#059669"/>
+  <text x="131" y="340" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Registry</text>
+  <text x="131" y="356" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">self-describing</text>
+  <rect x="220" y="318" width="150" height="52" rx="8" fill="#fff" stroke="#059669"/>
+  <text x="295" y="340" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Pipeline</text>
+  <text x="295" y="356" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">validate · hook · permit</text>
+  <rect x="384" y="318" width="156" height="52" rx="8" fill="#fff" stroke="#059669"/>
+  <text x="462" y="340" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600">Executor</text>
+  <text x="462" y="356" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">parallel reads / serial writes</text>
+  <rect x="56" y="382" width="484" height="42" rx="8" fill="#fff" stroke="#059669"/>
+  <text x="298" y="408" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">read write edit glob grep shell web fetch csv system memory skill delegate</text>
+
+  <rect x="580" y="280" width="230" height="72" rx="10" fill="#fee2e2" stroke="#dc2626"/>
+  <text x="695" y="308" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Permissions</text>
+  <text x="695" y="328" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">plan · default · accept_edits · dont_ask</text>
+  <text x="695" y="344" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">hook deny &gt; ask &gt; allow</text>
+
+  <rect x="830" y="280" width="230" height="72" rx="10" fill="#fee2e2" stroke="#dc2626"/>
+  <text x="945" y="308" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Hooks snapshot</text>
+  <text x="945" y="328" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">frozen at startup</text>
+  <text x="945" y="344" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">Pre / Post / Stop</text>
+
+  <rect x="580" y="368" width="230" height="72" rx="10" fill="#ecfdf5" stroke="#059669"/>
+  <text x="695" y="396" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Memory files</text>
+  <text x="695" y="416" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">user · project · session · feedback</text>
+  <text x="695" y="432" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">.gla/memory + AGENT.md</text>
+
+  <rect x="830" y="368" width="230" height="72" rx="10" fill="#ecfdf5" stroke="#059669"/>
+  <text x="945" y="396" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Skills (two-phase)</text>
+  <text x="945" y="416" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">frontmatter at boot</text>
+  <text x="945" y="432" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="10">full body on load_skill</text>
+
+  <rect x="40" y="470" width="320" height="80" rx="10" fill="#ffedd5" stroke="#ea580c"/>
+  <text x="200" y="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">MCP hub</text>
+  <text x="200" y="520" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">stdio / SSE · tools/list · tools/call</text>
+  <text x="200" y="536" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">wrapped as the same Tool interface</text>
+
+  <rect x="380" y="470" width="320" height="80" rx="10" fill="#ffedd5" stroke="#ea580c"/>
+  <text x="540" y="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Sub-agents</text>
+  <text x="540" y="520" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">delegate_task · nested query loop</text>
+  <text x="540" y="536" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">explore (read) or worker (write)</text>
+
+  <rect x="720" y="470" width="340" height="80" rx="10" fill="#ffedd5" stroke="#ea580c"/>
+  <text x="890" y="500" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Context compact</text>
+  <text x="890" y="520" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">snip old tool results</text>
+  <text x="890" y="536" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11">microcompact ’ collapse</text>
+
+  <path d="M150 87 H180" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M295 122 V160" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M580 122 V160" stroke="#d97706" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M580 204 H610" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <path d="M380 248 V280" stroke="#059669" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <text x="550" y="620" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b7280">Editable source: architecture.drawio · open in https://app.diagrams.net/</text>
+</svg>

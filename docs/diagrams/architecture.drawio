@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" agent="General-Local-Agent" version="24.0.0" type="device">
+  <diagram id="gla-architecture" name="System Architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="780" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="General Local Agent — Architecture" style="text;html=1;fontSize=20;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="280" y="16" width="640" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="User" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="70" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ui" value="Gradio UI (app.py)&#10;chat · trace · permission mode" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="240" y="60" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="boot" value="Bootstrap&#10;env · skills meta · hooks snapshot · MCP connect" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="520" y="60" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="state" value="Two-tier state&#10;SessionState (infra) + AppState (UI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="840" y="60" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="loop" value="Query loop (async generator)&#10;compact → model → tools → results → repeat&#10;Terminal: completed | ask | max_turns | error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="240" y="180" width="400" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="llm" value="Gemini client&#10;sticky model latch&#10;slot reservation 8K→64K" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="680" y="180" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="prompts" value="System prompt&#10;AGENT.md + recalled memory + skill menu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="930" y="180" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tools" value="Tool system" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="310" width="520" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="t-reg" value="Registry&#10;self-describing tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="100" y="350" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t-pipe" value="Pipeline&#10;validate · hook · permit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="265" y="350" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t-exec" value="Executor&#10;parallel reads / serial writes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="430" y="350" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t-set" value="Built-ins: read / write / edit / glob / grep / shell / web / fetch / csv / system / memory / skill / delegate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;align=left;" vertex="1" parent="1">
+          <mxGeometry x="100" y="425" width="480" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="perm" value="Permissions&#10;plan · default · accept_edits · dont_ask&#10;hook deny &gt; ask &gt; allow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="630" y="310" width="230" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hooks" value="Hooks snapshot&#10;frozen at startup&#10;PreToolUse / PostToolUse / Stop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="880" y="310" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="mem" value="Memory files&#10;user · project · session · feedback&#10;.gla/memory + AGENT.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="630" y="410" width="230" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="skills" value="Skills (two-phase)&#10;frontmatter at boot&#10;body on load_skill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="880" y="410" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mcp" value="MCP hub&#10;stdio / SSE · tools/list · tools/call&#10;wrapped as the same Tool interface" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="80" y="510" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tasks" value="Sub-agents&#10;delegate_task · nested query loop&#10;explore (read) or worker (write)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="430" y="510" width="280" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="compact" value="Context compact&#10;snip → microcompact → collapse" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="740" y="510" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="user" target="ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="ui" target="loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="boot" target="loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="loop" target="llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="loop" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="perm" target="t-pipe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="hooks" target="t-pipe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="mcp" target="t-reg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="tasks" target="loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

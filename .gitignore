@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.env
+.gla/memory/session-*.md
+.gla/cache/
+temp_print.txt

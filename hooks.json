@@ -1,0 +1,8 @@
+{
+  "disableAllHooks": false,
+  "hooks": {
+    "PreToolUse": [],
+    "PostToolUse": [],
+    "Stop": []
+  }
+}

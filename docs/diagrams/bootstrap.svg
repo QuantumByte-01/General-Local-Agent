@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="260" viewBox="0 0 1180 260" role="img" aria-labelledby="title">
+  <title id="title">Bootstrap pipeline</title>
+  <rect width="1180" height="260" fill="#f7f8fb"/>
+  <text x="590" y="32" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#1f2937">Bootstrap pipeline (once per process)</text>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="20" y="56" width="200" height="80" rx="10" fill="#fef3c7" stroke="#d97706"/>
+    <text x="120" y="88" text-anchor="middle" font-size="13" font-weight="700">1. Load .env</text>
+    <text x="120" y="108" text-anchor="middle" font-size="12">and Settings</text>
+
+    <rect x="250" y="56" width="200" height="80" rx="10" fill="#fef3c7" stroke="#d97706"/>
+    <text x="350" y="88" text-anchor="middle" font-size="13" font-weight="700">2. Workspace</text>
+    <text x="350" y="108" text-anchor="middle" font-size="12">AGENT_BASE_DIR</text>
+
+    <rect x="480" y="56" width="220" height="80" rx="10" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="590" y="82" text-anchor="middle" font-size="13" font-weight="700">3. Parallel load</text>
+    <text x="590" y="102" text-anchor="middle" font-size="11">memory · skill frontmatter</text>
+    <text x="590" y="118" text-anchor="middle" font-size="11">hooks snapshot · MCP</text>
+
+    <rect x="730" y="56" width="200" height="80" rx="10" fill="#ecfdf5" stroke="#059669"/>
+    <text x="830" y="88" text-anchor="middle" font-size="13" font-weight="700">4. Register tools</text>
+    <text x="830" y="108" text-anchor="middle" font-size="12">built-in + MCP wrap</text>
+
+    <rect x="960" y="56" width="200" height="80" rx="10" fill="#ede9fe" stroke="#7c3aed"/>
+    <text x="1060" y="88" text-anchor="middle" font-size="13" font-weight="700">5. Engine ready</text>
+    <text x="1060" y="108" text-anchor="middle" font-size="12">sticky model unset</text>
+  </g>
+  <g stroke="#4b5563" stroke-width="1.5">
+    <path d="M220 96 H250"/>
+    <path d="M450 96 H480"/>
+    <path d="M700 96 H730"/>
+    <path d="M930 96 H960"/>
+  </g>
+  <rect x="20" y="160" width="1140" height="72" rx="10" fill="#fff" stroke="#9ca3af"/>
+  <text x="40" y="188" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">Snapshot security</text>
+  <text x="40" y="210" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#374151">Hooks are frozen in memory at this step and not re-read from disk. MCP connect failures are recorded and shown in the UI banner; the agent still starts. Source: bootstrap.drawio</text>
+</svg>

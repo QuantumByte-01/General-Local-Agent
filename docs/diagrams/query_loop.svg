@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="980" viewBox="0 0 720 980" role="img" aria-labelledby="title">
+  <title id="title">Query loop workflow</title>
+  <rect width="720" height="980" fill="#f7f8fb"/>
+  <text x="360" y="36" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#1f2937">Query loop workflow</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="210" y="56" width="300" height="48" rx="10" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="360" y="86" text-anchor="middle" font-size="13" font-weight="600">User message or yes/no resume</text>
+
+    <rect x="210" y="130" width="300" height="48" rx="10" fill="#ecfdf5" stroke="#059669"/>
+    <text x="360" y="160" text-anchor="middle" font-size="13">Recall memory + assemble prompt</text>
+
+    <rect x="210" y="204" width="300" height="48" rx="10" fill="#fef3c7" stroke="#d97706"/>
+    <text x="360" y="234" text-anchor="middle" font-size="13">Autocompact if over char budget</text>
+
+    <rect x="210" y="278" width="300" height="48" rx="10" fill="#ede9fe" stroke="#7c3aed"/>
+    <text x="360" y="308" text-anchor="middle" font-size="13">Call Gemini (tools + system)</text>
+
+    <polygon points="360,352 455,392 360,432 265,392" fill="#fef3c7" stroke="#d97706"/>
+    <text x="360" y="397" text-anchor="middle" font-size="12" font-weight="600">Truncated?</text>
+
+    <rect x="500" y="368" width="190" height="48" rx="10" fill="#fef3c7" stroke="#d97706"/>
+    <text x="595" y="390" text-anchor="middle" font-size="11">Escalate output slot</text>
+    <text x="595" y="406" text-anchor="middle" font-size="11">and retry turn</text>
+
+    <polygon points="360,456 455,496 360,536 265,496" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="360" y="501" text-anchor="middle" font-size="12" font-weight="600">Tool calls?</text>
+
+    <rect x="40" y="476" width="180" height="48" rx="10" fill="#fee2e2" stroke="#dc2626"/>
+    <text x="130" y="498" text-anchor="middle" font-size="11">Stop hook?</text>
+    <text x="130" y="514" text-anchor="middle" font-size="11">maybe continue</text>
+
+    <rect x="40" y="548" width="180" height="44" rx="10" fill="#ecfdf5" stroke="#059669"/>
+    <text x="130" y="576" text-anchor="middle" font-size="12" font-weight="700">Terminal: completed</text>
+
+    <rect x="210" y="568" width="300" height="48" rx="10" fill="#fee2e2" stroke="#dc2626"/>
+    <text x="360" y="598" text-anchor="middle" font-size="13">PreToolUse hooks + permission mode</text>
+
+    <polygon points="360,642 455,682 360,722 265,682" fill="#fee2e2" stroke="#dc2626"/>
+    <text x="360" y="687" text-anchor="middle" font-size="12" font-weight="600">Any ask?</text>
+
+    <rect x="500" y="658" width="190" height="52" rx="10" fill="#ffedd5" stroke="#ea580c"/>
+    <text x="595" y="680" text-anchor="middle" font-size="11">PermissionRequest</text>
+    <text x="595" y="696" text-anchor="middle" font-size="11">pause until yes/no</text>
+
+    <rect x="200" y="756" width="320" height="56" rx="10" fill="#ecfdf5" stroke="#059669"/>
+    <text x="360" y="778" text-anchor="middle" font-size="12">Partition: parallel reads, serial writes</text>
+    <text x="360" y="796" text-anchor="middle" font-size="11">preserve submission order</text>
+
+    <rect x="210" y="844" width="300" height="48" rx="10" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="360" y="874" text-anchor="middle" font-size="13">Append results · PostToolUse · loop</text>
+
+    <rect x="210" y="920" width="300" height="40" rx="10" fill="#fee2e2" stroke="#dc2626"/>
+    <text x="360" y="946" text-anchor="middle" font-size="12">Max turns ’ Terminal max_turns</text>
+  </g>
+
+  <g stroke="#4b5563" stroke-width="1.5" fill="none">
+    <path d="M360 104 V130"/>
+    <path d="M360 178 V204"/>
+    <path d="M360 252 V278"/>
+    <path d="M360 326 V352"/>
+    <path d="M360 432 V456"/>
+    <path d="M265 496 H220"/>
+    <path d="M130 524 V548"/>
+    <path d="M360 536 V568"/>
+    <path d="M360 616 V642"/>
+    <path d="M360 722 V756"/>
+    <path d="M360 812 V844"/>
+    <path d="M455 392 H500"/>
+    <path d="M455 682 H500"/>
+  </g>
+  <text x="470" y="386" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#92400e">yes</text>
+  <text x="250" y="492" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#1d4ed8">no</text>
+  <text x="470" y="676" font-family="Segoe UI, Arial, sans-serif" font-size="10" fill="#b91c1c">yes</text>
+  <text x="360" y="968" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#6b7280">Source: query_loop.drawio</text>
+</svg>

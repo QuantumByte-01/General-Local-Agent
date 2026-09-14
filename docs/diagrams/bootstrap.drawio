@@ -1,0 +1,35 @@
+<mxfile host="app.diagrams.net" agent="General-Local-Agent" version="24.0.0" type="device">
+  <diagram id="gla-bootstrap" name="Bootstrap">
+    <mxGraphModel dx="1200" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="360" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Bootstrap pipeline (once per process)" style="text;html=1;fontSize=20;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="360" y="16" width="520" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="b1" value="1. Load .env&#10;and Settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b2" value="2. Workspace&#10;AGENT_BASE_DIR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="230" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b3" value="3. Parallel load&#10;memory · skill frontmatter&#10;hooks.json snapshot · MCP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="420" y="80" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b4" value="4. Register built-in&#10;+ wrapped MCP tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="670" y="80" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="b5" value="5. Engine ready&#10;sticky model unset&#10;until first LLM call" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="900" y="80" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="Hooks are captured into memory here and never re-read from disk implicitly. MCP failures are recorded on the hub and shown in the UI banner; the process still starts." style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="1060" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="endArrow=block;html=1;rounded=1;" edge="1" parent="1" source="b1" target="b2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;rounded=1;" edge="1" parent="1" source="b2" target="b3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;rounded=1;" edge="1" parent="1" source="b3" target="b4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" style="endArrow=block;html=1;rounded=1;" edge="1" parent="1" source="b4" target="b5"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

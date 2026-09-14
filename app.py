@@ -1,142 +1,156 @@
+from __future__ import annotations
+
+import asyncio
 import os
-import uuid
+
 import gradio as gr
 from dotenv import load_dotenv
 
-from agent.runtime import run_agent_once, generate_plan_preview
-from agent.graph import build_demo_graph
+from agent.bootstrap import bootstrap
+from agent.loop import run_query
+from agent.state import AppState
+
+load_dotenv()
+
+_ENGINE = None
+_LOCK = asyncio.Lock()
 
 
-load_dotenv()  
+async def get_engine():
+    global _ENGINE
+    async with _LOCK:
+        if _ENGINE is None:
+            _ENGINE = await bootstrap()
+        return _ENGINE
 
 
-def _normalize_confirmation(text: str) -> str:
-    if not text:
-        return ""
-    normalized = text.strip().lower()
-    yes_tokens = {
-        "yes",
-        "y",
-        "ok",
-        "okay",
-        "sure",
-        "proceed",
-        "continue",
-        "confirm",
-        "go ahead",
-        "run",
-        "execute",
-    }
-    no_tokens = {
-        "no",
-        "n",
-        "stop",
-        "cancel",
-        "abort",
-        "wait",
-    }
-    for token in yes_tokens:
-        if normalized == token or normalized.startswith(f"{token} "):
-            return "yes"
-    if normalized.startswith("yes"):
-        return "yes"
-    for token in no_tokens:
-        if normalized == token or normalized.startswith(f"{token} "):
-            return "no"
-    if normalized.startswith("no"):
-        return "no"
-    return ""
+def _format_event(event) -> str | None:
+    kind = getattr(event, "kind", "")
+    if kind == "status":
+        return f"_{event.text}_"
+    if kind == "tool_started":
+        spec = " speculatively" if event.speculative else ""
+        return f"**tool** `{event.name}`{spec}"
+    if kind == "tool_finished":
+        flag = "ok" if event.ok else "err"
+        clip = (event.output or "")[:500]
+        return f"**{flag}** `{event.name}` ({event.duration_ms}ms)\n```\n{clip}\n```"
+    if kind == "permission_request":
+        return f"**permission needed**\n{event.reason}\n\nReply **yes** or **no**."
+    if kind == "assistant":
+        return event.text
+    if kind == "terminal" and event.error:
+        return f"**error:** {event.error}"
+    return None
 
 
-def agent_turn(user_msg: str, history: list, session_state: dict):
- 
-    if not session_state or session_state.get("session_id") is None:
-        session_state = {"session_id": str(uuid.uuid4())}
+async def agent_turn(user_msg: str, history: list, mode: str, log: str):
+    user_msg = (user_msg or "").strip()
+    if not user_msg:
+        yield history or [], log or "idle", ""
+        return
 
-    convo_history = history + [{"role": "user", "content": user_msg}]
+    engine = await get_engine()
+    if mode in {"plan", "default", "accept_edits", "dont_ask"}:
+        engine.session.permission_mode = mode  # type: ignore[assignment]
 
-    base_dir = os.getenv(
-        "AGENT_BASE_DIR"
-    )
+    history = list(history or [])
+    history.append({"role": "user", "content": user_msg})
+    live_log = log or ""
 
-    pending_plan = session_state.get("pending_plan")
-    pending_goal = session_state.get("pending_goal")
+    resume = user_msg if engine.app.pending_calls else None
+    goal = None if resume else user_msg
 
-    if pending_plan:
-        decision = _normalize_confirmation(user_msg)
-        if decision == "yes":
-            final_answer, _debug_info = run_agent_once(
-                goal=pending_goal or session_state.get("last_goal") or "",
-                chat_history=convo_history,
-                base_dir=base_dir,
-                max_retries=3,
-                existing_plan=pending_plan,
-            )
-            assistant_msg = final_answer
-            session_state.pop("pending_plan", None)
-            session_state.pop("pending_goal", None)
-        elif decision == "no":
-            assistant_msg = (
-                "Okay, I cancelled that plan. Share new instructions when ready."
-            )
-            session_state.pop("pending_plan", None)
-            session_state.pop("pending_goal", None)
-        else:
-            assistant_msg = (
-                "Please reply with yes to run the proposed plan or no to revise it."
-            )
-        new_history = convo_history + [{"role": "assistant", "content": assistant_msg}]
-        return new_history, "", session_state
-
-    plan, plan_summary = generate_plan_preview(
-        goal=user_msg,
-        chat_history=convo_history,
-        base_dir=base_dir,
-    )
-
-    session_state["pending_plan"] = plan
-    session_state["pending_goal"] = user_msg
-    session_state["last_goal"] = user_msg
-
-    assistant_msg = plan_summary
-    new_history = convo_history + [{"role": "assistant", "content": assistant_msg}]
-
-    return new_history, "", session_state
+    async for event in run_query(engine, goal, resume=resume):
+        piece = _format_event(event)
+        if event.kind in {"status", "tool_started", "tool_finished"}:
+            if piece:
+                live_log = (live_log + "\n" + piece).strip()
+                yield history, live_log, ""
+            continue
+        if event.kind == "permission_request":
+            history.append({"role": "assistant", "content": piece or event.reason})
+            yield history, live_log, ""
+            continue
+        if event.kind == "assistant":
+            history.append({"role": "assistant", "content": event.text})
+            yield history, live_log, ""
+            continue
+        if event.kind == "terminal":
+            if event.error:
+                history.append(
+                    {"role": "assistant", "content": f"Stopped ({event.reason}): {event.error}"}
+                )
+            elif event.reason not in {"completed"} and event.text:
+                if not history or history[-1].get("content") != event.text:
+                    history.append({"role": "assistant", "content": event.text})
+            yield history, live_log, ""
 
 
-def main():
-    demo_graph = build_demo_graph()
-    print("=== AGENT FLOW GRAPH (LangGraph ASCII) ===")
-    print(demo_graph.get_graph().draw_ascii())
-    print("=========================================\n")
+async def reset_session():
+    engine = await get_engine()
+    engine.app = AppState()
+    engine.session.file_reads.clear()
+    engine.session.aborted = False
+    return [], "Session cleared.", ""
 
-    with gr.Blocks() as demo:
-        gr.Markdown("A General Local Agent for Computer Task Execution")
 
-        chatbot = gr.Chatbot(
-            label="Local Agent",
-            height=400,
-            type="messages",  
+async def banner_text():
+    engine = await get_engine()
+    return engine.status_summary()
+
+
+def main() -> None:
+    workspace = os.getenv("AGENT_BASE_DIR") or os.getcwd()
+    with gr.Blocks(title="General Local Agent", fill_height=True) as demo:
+        gr.Markdown(
+            f"# General Local Agent\n"
+            f"Local tool-using loop · workspace `{workspace}` · "
+            f"[architecture](docs/ARCHITECTURE.md)"
         )
-
+        banner = gr.Markdown("Starting…")
+        with gr.Row():
+            chatbot = gr.Chatbot(label="Agent", height=480, type="messages")
+            trace = gr.Textbox(label="Trace", value="idle", lines=18, interactive=False)
         user_in = gr.Textbox(
-            label="Your request",
-            placeholder=(""
-            ),
+            label="Request",
+            placeholder="Summarize AGENT.md, search the web, or edit a file in the workspace…",
             lines=2,
         )
-
-        session_state = gr.State({})
-
-        run_btn = gr.Button("Run")
+        mode = gr.Radio(
+            choices=["plan", "default", "accept_edits", "dont_ask"],
+            value="default",
+            label="Permission mode",
+            info="plan = read-only · default = confirm writes/shell · accept_edits = auto file I/O · dont_ask = auto all (logged)",
+        )
+        with gr.Row():
+            run_btn = gr.Button("Run", variant="primary")
+            reset_btn = gr.Button("New session")
+        gr.Examples(
+            examples=[
+                ["Read AGENT.md and explain how the query loop works"],
+                ["What is using CPU and RAM on this machine?"],
+                ["Search the web for Model Context Protocol stdio transport and cite sources"],
+            ],
+            inputs=user_in,
+        )
 
         run_btn.click(
             fn=agent_turn,
-            inputs=[user_in, chatbot, session_state],
-            outputs=[chatbot, user_in, session_state],
+            inputs=[user_in, chatbot, mode, trace],
+            outputs=[chatbot, trace, user_in],
         )
+        user_in.submit(
+            fn=agent_turn,
+            inputs=[user_in, chatbot, mode, trace],
+            outputs=[chatbot, trace, user_in],
+        )
+        reset_btn.click(fn=reset_session, outputs=[chatbot, trace, user_in])
+        demo.load(banner_text, outputs=banner)
 
-    demo.launch(server_name="0.0.0.0", server_port=7869, debug=True)
+    host = os.getenv("AGENT_HOST", "127.0.0.1")
+    port = int(os.getenv("AGENT_PORT", "7869"))
+    demo.launch(server_name=host, server_port=port)
 
 
 if __name__ == "__main__":
