@@ -1,0 +1,18 @@
+id: delegate_explore
+user: Use a sub-agent to read secret.txt
+mode: dont_ask
+workspace_files:
+  secret.txt: classified
+script:
+  - tool_calls:
+      - name: delegate_task
+        arguments: {goal: Read secret.txt and return its contents, agent_type: explore}
+  - tool_calls:
+      - name: read_file
+        arguments: {path: secret.txt}
+  - text: classified
+  - text: "The sub-agent found: classified"
+expect:
+  terminal: completed
+  tools_contains: [delegate_task]
+  answer_contains: classified

@@ -1,0 +1,14 @@
+{
+  "disableAllHooks": false,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "shell",
+        "permissionBehavior": "ask",
+        "message": "Confirm shell"
+      }
+    ],
+    "PostToolUse": [],
+    "Stop": []
+  }
+}

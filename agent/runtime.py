@@ -53,10 +53,23 @@ class Engine:
         mcp_names = ", ".join(getattr(self.mcp, "sessions", {}) or {}) or "none"
         mcp_err = "; ".join(getattr(self.mcp, "errors", []) or [])
         n_tools = len(self.registry.all())
+        todos = getattr(self.app, "todos", None) or []
+        open_todos = sum(1 for t in todos if t.get("status") in {"pending", "in_progress"})
         line = (
             f"workspace `{self.workspace}` · {n_tools} tools · "
             f"mode `{self.session.permission_mode}` · skills: {skills} · MCP: {mcp_names}"
         )
+        if open_todos:
+            line += f" · todos open: {open_todos}"
         if mcp_err:
             line += f" · MCP issues: {mcp_err}"
         return line
+
+
+def reset_runtime(engine: Engine) -> None:
+    engine.app = AppState()
+    engine.session.file_reads.clear()
+    engine.session.aborted = False
+    engine.session.tool_calls = 0
+    engine._system_prompt = None
+    engine._prompt_sig = None

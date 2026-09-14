@@ -55,3 +55,4 @@ class AppState:
     pending_reason: str = ""
     status: str = ""
     last_terminal: str = ""
+    todos: list[dict[str, Any]] = field(default_factory=list)

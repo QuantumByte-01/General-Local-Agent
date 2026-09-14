@@ -26,9 +26,11 @@ def test_low_latency_defaults(monkeypatch, tmp_path):
     monkeypatch.delenv("AGENT_LLM_TIMEOUT_MS", raising=False)
     monkeypatch.delenv("GEMINI_MODEL_PREFERENCE", raising=False)
     monkeypatch.delenv("GEMINI_MODELS", raising=False)
+    monkeypatch.setenv("AGENT_MAX_TURNS", "12")
     settings = load_settings(tmp_path)
     assert settings.low_latency is True
     assert settings.stream is True
     assert settings.thinking_budget == 0
     assert settings.llm_timeout_ms == 30_000
+    assert settings.max_turns == 12
     assert settings.models[0] == DEFAULT_MODELS[0]

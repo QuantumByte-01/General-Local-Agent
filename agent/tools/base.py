@@ -17,6 +17,7 @@ class ToolResult:
 class ToolContext(Protocol):
     workspace: Any
     session: Any
+    app: Any
     llm: Any
     hooks: Any
     memory: Any

@@ -9,6 +9,19 @@ from agent.tools.registry import ToolRegistry
 
 def test_safe_name():
     assert _safe_name("my-server", "do.thing") == "mcp_my_server_do_thing"
+    long_name = _safe_name("server", "x" * 80)
+    assert len(long_name) <= 64
+    assert long_name != _safe_name("server", "y" * 80)
+
+
+def test_register_renames_collisions():
+    registry = ToolRegistry()
+    register_builtin(registry)
+    from agent.tools.builtin.read import ReadTool
+
+    second = ReadTool()
+    registry.register(second)
+    assert second.name == "read_file_2"
 
 
 @pytest.mark.asyncio

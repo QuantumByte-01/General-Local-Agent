@@ -23,6 +23,8 @@ def build_system_prompt(
 
 ## Operating rules
 - Prefer dedicated tools over shell. Use `read_file`, `edit_file`, `write_file`, `glob_files`, and `grep` for files.
+- `read_file` on a directory lists entries.
+- Use `todo` to keep a short in-session task list for multi-step work.
 - Use `shell` only when no dedicated tool fits (git, package managers, OS commands).
 - Stay inside the workspace unless the user explicitly names a path outside it (tools will reject escapes).
 - Never invent file contents. Read before edit. If an edit fails uniqueness, re-read and retry.

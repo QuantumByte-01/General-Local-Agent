@@ -58,8 +58,8 @@ def is_affirmative(text: str | bool | None) -> bool | None:
         "confirm", "go ahead", "run", "execute", "allow", "approve",
     }
     no = {"no", "n", "stop", "cancel", "abort", "deny", "reject"}
-    if token in yes or token.startswith("yes"):
+    if token in yes or token.startswith("yes ") or token.startswith("y "):
         return True
-    if token in no or token.startswith("no"):
+    if token in no or token.startswith("no ") or token.startswith("n "):
         return False
     return None

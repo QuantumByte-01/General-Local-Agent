@@ -50,6 +50,6 @@
   </g>
   <rect x="20" y="250" width="1140" height="78" rx="10" fill="#fff" stroke="#9ca3af"/>
   <text x="40" y="278" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#111827">Concurrency rule</text>
-  <text x="40" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#374151">isConcurrencySafe(input) is per-call. Unknown tool, parse failure, or exception ’ serial.</text>
+  <text x="40" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#374151">isConcurrencySafe(input) is per-call. Unknown tool, parse failure, or exception ï¿½ serial.</text>
   <text x="40" y="318" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#374151">Results are buffered and released in submission order, not completion order. Source: tool_pipeline.drawio</text>
 </svg>

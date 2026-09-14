@@ -64,7 +64,8 @@ Hook `permissionBehavior` uses **deny > ask > allow**.
 ## Layout
 
 ```
-app.py                 Gradio REPL that consumes loop events
+app.py / agent/ui.py   Gradio REPL that consumes loop events
+agent/cli.py           Headless `-p` print mode (same loop + LLM)
 agent/loop.py          Query generator
 agent/bootstrap.py     Process init
 agent/prompts.py       System prompt

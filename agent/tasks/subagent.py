@@ -44,6 +44,8 @@ async def run_subagent(parent: Any, goal: str, agent_type: str = "explore") -> s
     texts: list[str] = []
     async for event in run_query(child, goal, is_subagent=True):
         kind = getattr(event, "kind", "")
+        if kind in {"tool_started", "tool_finished", "status"}:
+            await parent.emit(event)
         if kind == "assistant":
             texts.append(event.text)
         if kind == "terminal":
@@ -51,6 +53,7 @@ async def run_subagent(parent: Any, goal: str, agent_type: str = "explore") -> s
                 texts.append(event.text)
             if event.error:
                 texts.append(f"error: {event.error}")
+    parent.session.file_reads.update(child.session.file_reads)
     return "\n".join(t for t in texts if t).strip() or "(sub-agent produced no text)"
 
 
@@ -65,7 +68,7 @@ class _ChildEngine:
             max_output_tokens=parent.session.max_output_tokens,
             trusted=parent.session.trusted,
         )
-        self.session.file_reads = parent.session.file_reads
+        self.session.file_reads = dict(parent.session.file_reads)
         self.app = AppState()
         self.registry = registry
         self.llm = parent.llm

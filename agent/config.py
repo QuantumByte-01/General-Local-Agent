@@ -36,6 +36,16 @@ class Settings:
     llm_timeout_ms: int = 30_000
 
 
+def _int_env(name: str, default: int) -> int:
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        return default
+
+
 def _split_csv(raw: str) -> list[str]:
     out: list[str] = []
     for part in raw.replace(";", ",").split(","):
@@ -78,6 +88,9 @@ def load_settings(project_root: Path | None = None) -> Settings:
         models=models or list(DEFAULT_MODELS),
         tavily_key=os.getenv("TAVILY_API_KEY", "").strip(),
         permission_mode=os.getenv("AGENT_PERMISSION_MODE", "default").strip() or "default",
+        max_turns=_int_env("AGENT_MAX_TURNS", 24),
+        compact_chars=_int_env("AGENT_COMPACT_CHARS", 80_000),
+        tool_result_chars=_int_env("AGENT_TOOL_RESULT_CHARS", 12_000),
         mcp_config=mcp_path if mcp_path.exists() else None,
         hooks_config=hooks_path if hooks_path.exists() else None,
         low_latency=low_latency,

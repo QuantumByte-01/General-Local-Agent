@@ -12,6 +12,8 @@ uv run python -m agent.harness tests/harness/cases
 
 `pytest` picks up every YAML file in `tests/harness/cases/`. Set `mcp: true` on a case to attach the in-process echo/add MCP server (`mcp_harness_echo`, `mcp_harness_add`). Copy `mcp.example.json` to `mcp.json` to spawn the real stdio echo server in the live app.
 
+A new user message while tools are waiting **cancels** those calls (see `pending_replaced_by_new_request`). `delegate_explore` covers sub-agents (child turns consume the next `script` items because they share the scripted LLM).
+
 ## Adding a case
 
 ```yaml

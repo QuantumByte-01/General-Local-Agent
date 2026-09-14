@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from agent.tools.base import Tool, ToolContext, ToolResult
+from agent.tools.files import record_file
 from agent.tools.paths import resolve_in_workspace
 
 
@@ -50,5 +51,6 @@ class EditTool(Tool):
             )
         updated = original.replace(old, new) if replace_all else original.replace(old, new, 1)
         path.write_text(updated, encoding="utf-8")
+        record_file(path, updated, ctx.session)
         n = count if replace_all else 1
         return ToolResult(ok=True, output=f"updated {path} ({n} replacement(s))")

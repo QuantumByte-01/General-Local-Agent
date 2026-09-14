@@ -25,11 +25,15 @@ The query loop, tool pipeline, and bootstrap:
 ```powershell
 uv sync
 uv run app.py
+# or: uv run gla
+# one-shot, LLM still used: uv run gla -p "Summarize AGENT.md" --mode plan
 ```
 
 UI: `http://127.0.0.1:7869`
 
 Permission modes: `plan` (read-only) · `default` (confirm writes/shell) · `accept_edits` · `dont_ask`.
+
+In the UI: **Allow** / **Deny** / **Abort**, or slash commands (`/help`, `/mode plan`, `/compact`, `/clear`). A new request while tools are waiting **cancels** those calls.
 
 ## Tests
 

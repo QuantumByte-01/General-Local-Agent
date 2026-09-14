@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import re
+import sys
 from contextlib import AsyncExitStack
 from pathlib import Path
 from typing import Any
@@ -13,7 +15,11 @@ from agent.tools.registry import ToolRegistry
 
 def _safe_name(server: str, tool: str) -> str:
     raw = f"mcp_{server}_{tool}"
-    return re.sub(r"[^A-Za-z0-9_]", "_", raw)[:64]
+    cleaned = re.sub(r"[^A-Za-z0-9_]", "_", raw)
+    if len(cleaned) <= 64:
+        return cleaned
+    digest = hashlib.sha1(raw.encode("utf-8")).hexdigest()[:8]
+    return f"{cleaned[:55]}_{digest}"
 
 
 class McpTool(Tool):
@@ -76,10 +82,11 @@ class McpHub:
         if not servers:
             return
 
+        default_timeout = 20.0 if sys.platform == "win32" else 8.0
         async def _one(name: str, spec: dict[str, Any]) -> None:
             await asyncio.wait_for(
                 self._connect_one(name, spec, StdioServerParameters, stdio_client, ClientSession),
-                timeout=float(spec.get("timeout") or 8),
+                timeout=float(spec.get("timeout") or default_timeout),
             )
 
         results = await asyncio.gather(
@@ -162,7 +169,10 @@ class McpHub:
                     read_only=read_only,
                 )
                 try:
-                    registry.register(tool)
+                    wanted = tool.name
+                    registered = registry.register(tool)
+                    if registered != wanted:
+                        self.errors.append(f"{server}/{remote.name}: renamed to {registered} (name collision)")
                     names.append(tool.name)
                 except Exception as exc:
                     self.errors.append(f"{server}/{remote.name}: {exc}")

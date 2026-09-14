@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
 from typing import Any
 
-from agent.state import FileReadRecord
 from agent.tools.base import Tool, ToolContext, ToolResult
+from agent.tools.files import record_file
 from agent.tools.paths import resolve_in_workspace
 
 _IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
@@ -83,9 +82,6 @@ class ReadTool(Tool):
         suffix = ""
         if offset - 1 + limit < len(lines):
             suffix = f"\n… {len(lines) - (offset - 1 + limit)} more lines"
-        digest = hashlib.sha256(raw.encode("utf-8", errors="replace")).hexdigest()[:16]
-        ctx.session.file_reads[str(path)] = FileReadRecord(
-            mtime=stat.st_mtime, size=stat.st_size, excerpt_hash=digest
-        )
+        record_file(path, raw, ctx.session)
         header = f"{path} ({len(lines)} lines)\n"
         return ToolResult(ok=True, output=header + numbered + suffix)

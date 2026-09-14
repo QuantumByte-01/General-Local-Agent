@@ -9,6 +9,7 @@ from agent.tools.builtin.read import ReadTool
 from agent.tools.builtin.shell import ShellTool
 from agent.tools.builtin.skill import SkillTool
 from agent.tools.builtin.system_info import SystemInfoTool
+from agent.tools.builtin.todo import TodoTool
 from agent.tools.builtin.web_search import WebSearchTool
 from agent.tools.builtin.write import WriteTool
 from agent.tools.registry import ToolRegistry
@@ -28,6 +29,7 @@ def register_builtin(registry: ToolRegistry) -> None:
         CsvTool(),
         MemoryTool(),
         SkillTool(),
+        TodoTool(),
         DelegateTool(),
     ):
         registry.register(tool)

@@ -20,6 +20,21 @@ from agent.tools.pipeline import PreparedCall, permission_for, prepare_call
 from agent.tools.executor import execute_batches
 
 
+def _deny_pending(engine: Any, prepared: list[PreparedCall], reason: str) -> None:
+    app = engine.app
+    for call in prepared:
+        app.messages.append(
+            ChatMessage(
+                role="tool",
+                content=reason,
+                tool_call_id=call.call_id,
+                tool_name=call.name,
+            )
+        )
+    app.pending_calls = []
+    app.pending_reason = ""
+
+
 async def run_query(
     engine: Any,
     user_text: str | None,
@@ -31,40 +46,43 @@ async def run_query(
     app = engine.app
     settings = engine.settings
 
-    if resume and app.pending_calls:
-        decision = is_affirmative(resume)
-        if decision is None:
-            yield PermissionRequest(
-                call_id=app.pending_calls[0]["id"],
-                name=app.pending_calls[0]["name"],
-                input=app.pending_calls[0].get("arguments") or {},
-                reason="Reply yes to allow these tool calls, or no to deny.",
-            )
-            return
+    if app.pending_calls:
+        token = resume if resume is not None else user_text
+        decision = is_affirmative(token)
         prepared = [
             prepare_call(engine.registry, c["id"], c["name"], c.get("arguments") or {})
             for c in app.pending_calls
         ]
-        if decision:
+        if decision is True:
             async for event in _run_tools(engine, prepared):
                 yield event
-        else:
-            for call in prepared:
-                app.messages.append(
-                    ChatMessage(
-                        role="tool",
-                        content="User denied this tool call.",
-                        tool_call_id=call.call_id,
-                        tool_name=call.name,
-                    )
-                )
+            app.pending_calls = []
+            app.pending_reason = ""
+        elif decision is False:
+            _deny_pending(engine, prepared, "User denied this tool call.")
             yield Status(text="Denied pending tool calls.")
-        app.pending_calls = []
-        app.pending_reason = ""
+        elif token:
+            _deny_pending(engine, prepared, "User cancelled these tool calls with a new request.")
+            yield Status(text="Cancelled pending tool calls; following the new request.")
+            app.messages.append(ChatMessage(role="user", content=str(token)))
+        else:
+            yield PermissionRequest(
+                call_id=app.pending_calls[0]["id"],
+                name=app.pending_calls[0]["name"],
+                input=app.pending_calls[0].get("arguments") or {},
+                reason="Reply yes to allow these tool calls, or no to deny. A new request cancels them.",
+            )
+            return
     elif user_text:
         app.messages.append(ChatMessage(role="user", content=user_text))
 
-    if resume and getattr(engine, "_system_prompt", None):
+    prompt_sig = (session.permission_mode, is_subagent)
+    if (
+        resume
+        and resume != "replace"
+        and getattr(engine, "_system_prompt", None)
+        and getattr(engine, "_prompt_sig", None) == prompt_sig
+    ):
         system = engine._system_prompt
     else:
         recall_query = user_text or (app.messages[-1].content if app.messages else "")
@@ -84,6 +102,7 @@ async def run_query(
             is_subagent=is_subagent,
         )
         engine._system_prompt = system
+        engine._prompt_sig = prompt_sig
 
     tool_defs = engine.registry.schemas_for_llm()
 
@@ -110,6 +129,9 @@ async def run_query(
                     tool_defs=tool_defs,
                     max_output_tokens=output_tokens_cap,
                 ):
+                    if session.aborted:
+                        yield Terminal(reason="aborted", text="Aborted.")
+                        return
                     if kind == "text" and payload:
                         yield TextDelta(text=str(payload))
                     elif kind == "turn":
@@ -212,6 +234,9 @@ async def run_query(
         if auto:
             async for event in _run_tools(engine, auto):
                 yield event
+            if session.aborted:
+                yield Terminal(reason="aborted", text="Aborted.")
+                return
         elif not denied:
             yield Terminal(reason="error", text="", error="tool calls produced no work")
             return

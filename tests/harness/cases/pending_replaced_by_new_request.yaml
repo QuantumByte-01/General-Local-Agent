@@ -1,0 +1,13 @@
+id: pending_replaced_by_new_request
+user: Write notes.md
+mode: default
+script:
+  - tool_calls:
+      - name: write_file
+        arguments: {path: notes.md, content: hi}
+  - text: hello instead
+resumes: ["just say hello instead"]
+expect:
+  terminal: completed
+  files_absent: [notes.md]
+  answer_contains: hello

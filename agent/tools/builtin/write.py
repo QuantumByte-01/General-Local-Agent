@@ -3,8 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from agent.state import FileReadRecord
 from agent.tools.base import Tool, ToolContext, ToolResult
+from agent.tools.files import record_file
 from agent.tools.paths import resolve_in_workspace
 
 
@@ -26,8 +26,5 @@ class WriteTool(Tool):
         path.parent.mkdir(parents=True, exist_ok=True)
         content = str(arguments["content"])
         path.write_text(content, encoding="utf-8")
-        stat = path.stat()
-        ctx.session.file_reads[str(path)] = FileReadRecord(
-            mtime=stat.st_mtime, size=stat.st_size, excerpt_hash="written"
-        )
+        record_file(path, content, ctx.session)
         return ToolResult(ok=True, output=f"wrote {path} ({len(content)} chars)")
