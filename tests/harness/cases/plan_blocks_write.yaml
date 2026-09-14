@@ -1,0 +1,12 @@
+id: plan_blocks_write
+user: Write a file
+mode: plan
+script:
+  - tool_calls:
+      - name: write_file
+        arguments: {path: notes.md, content: hi}
+  - text: Plan mode blocked the write. I only proposed creating notes.md.
+expect:
+  terminal: completed
+  files_absent: [notes.md]
+  tools: [write_file]

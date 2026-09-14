@@ -7,7 +7,7 @@ from agent.state import AppState, SessionState
 from agent.tools.registry import ToolRegistry
 
 
-async def run_subagent(parent: Any, goal: str, agent_type: str = "explore") -> str:
+def child_registry(parent: Any, agent_type: str = "explore") -> ToolRegistry:
     allow = {
         "read_file",
         "glob_files",
@@ -21,12 +21,24 @@ async def run_subagent(parent: Any, goal: str, agent_type: str = "explore") -> s
     if agent_type == "worker":
         allow |= {"write_file", "edit_file", "shell"}
 
-    child_registry = ToolRegistry()
+    registry = ToolRegistry()
     for tool in parent.registry.all():
         if tool.name in allow:
-            child_registry.register(tool)
+            registry.register(tool)
+            continue
+        if not tool.name.startswith("mcp_"):
+            continue
+        try:
+            mcp_ok = agent_type == "worker" or tool.is_read_only({})
+        except Exception:
+            mcp_ok = False
+        if mcp_ok:
+            registry.register(tool)
+    return registry
 
-    child = _ChildEngine(parent, child_registry)
+
+async def run_subagent(parent: Any, goal: str, agent_type: str = "explore") -> str:
+    child = _ChildEngine(parent, child_registry(parent, agent_type))
     child.session.permission_mode = "dont_ask"
     child.session.max_turns = 8
     texts: list[str] = []

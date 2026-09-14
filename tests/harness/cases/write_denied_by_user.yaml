@@ -1,0 +1,13 @@
+id: write_denied_by_user
+user: Create notes.md
+mode: default
+script:
+  - tool_calls:
+      - name: write_file
+        arguments: {path: notes.md, content: hi}
+  - text: Okay, cancelled the write.
+resumes: ["no"]
+expect:
+  terminal: completed
+  files_absent: [notes.md]
+  answer_contains: cancelled

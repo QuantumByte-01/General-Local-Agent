@@ -1,0 +1,14 @@
+id: write_asks_then_runs
+user: Create notes.md with the word hi
+mode: default
+script:
+  - tool_calls:
+      - name: write_file
+        arguments: {path: notes.md, content: hi}
+  - text: Wrote notes.md
+resumes: ["yes"]
+expect:
+  terminal: completed
+  tools: [write_file]
+  files:
+    notes.md: hi

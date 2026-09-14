@@ -1,0 +1,16 @@
+id: max_turns
+user: Keep going forever
+mode: dont_ask
+max_turns: 2
+script:
+  - tool_calls:
+      - name: glob_files
+        arguments: {pattern: "*.txt"}
+  - tool_calls:
+      - name: glob_files
+        arguments: {pattern: "*.md"}
+  - tool_calls:
+      - name: glob_files
+        arguments: {pattern: "*.py"}
+expect:
+  terminal: max_turns

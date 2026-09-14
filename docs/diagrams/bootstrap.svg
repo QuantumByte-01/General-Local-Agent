@@ -13,8 +13,8 @@
 
     <rect x="480" y="56" width="220" height="80" rx="10" fill="#dbeafe" stroke="#2563eb"/>
     <text x="590" y="82" text-anchor="middle" font-size="13" font-weight="700">3. Parallel load</text>
-    <text x="590" y="102" text-anchor="middle" font-size="11">memory ∑ skill frontmatter</text>
-    <text x="590" y="118" text-anchor="middle" font-size="11">hooks snapshot ∑ MCP</text>
+    <text x="590" y="102" text-anchor="middle" font-size="11">memory ù skill frontmatter</text>
+    <text x="590" y="118" text-anchor="middle" font-size="11">MCP servers + LLM warmup</text>
 
     <rect x="730" y="56" width="200" height="80" rx="10" fill="#ecfdf5" stroke="#059669"/>
     <text x="830" y="88" text-anchor="middle" font-size="13" font-weight="700">4. Register tools</text>

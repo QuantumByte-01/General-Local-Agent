@@ -19,13 +19,13 @@ Six pieces:
 | Skills | Frontmatter at boot; full body only on `load_skill` |
 | Hooks | Config snapshotted at startup (no silent reread) |
 
-MCP servers from `mcp.json` are wrapped as the same `Tool` interface. Sub-agents call the same loop with a trimmed tool set.
+MCP servers from `mcp.json` connect in parallel (8s timeout each, per-server session) and are wrapped as the same `Tool` interface. The harness can attach an in-process echo/add server without spawning a subprocess. Sub-agents keep read-only MCP tools (explore) or all MCP tools (worker).
 
 ## Bootstrap
 
 ![Bootstrap](diagrams/bootstrap.svg)
 
-`agent/bootstrap.py` loads settings, freezes `hooks.json`, loads skill **names**, connects MCP, then registers tools.
+`agent/bootstrap.py` loads settings, then in parallel: local files (memory, skill names, frozen `hooks.json`), MCP connect, and Gemini HTTP-client warmup. MCP tools are then wrapped onto the same registry.
 
 ## Query loop
 
@@ -36,7 +36,7 @@ Implemented in `agent/loop.py`:
 1. Append the user turn (or resume a pending permission).
 2. Recall memory and build the system prompt.
 3. Compact old tool output if the transcript is large.
-4. Call Gemini with function declarations.
+4. Call Gemini with function declarations. Tokens stream into the UI (`text_delta`); the model is still in the loop. Tool schemas and the HTTP client are cached.
 5. If the output was truncated, raise `max_output_tokens` (8K → 64K) and retry that turn (slot reservation).
 6. If there are no tool calls, run Stop hooks; maybe continue, else `Terminal(completed)`.
 7. Classify each call: hook deny, mode deny, ask, or allow.

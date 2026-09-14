@@ -24,9 +24,12 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.4.2", "pytest-asyncio>=0.24.0"]
 
-[project.scripts]
-gla = "app:main"
-
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 pythonpath = ["."]
+testpaths = ["tests"]
+
+[project.scripts]
+gla = "app:main"
+gla-harness = "agent.harness.__main__:main"

@@ -41,3 +41,14 @@ def test_deny_beats_allow():
     )
     hit = engine.pre_tool_use("shell", {"command": "echo hi"})
     assert hit.decision == "deny"
+
+
+def test_stop_once_only_blocks_first_time():
+    engine = HookEngine(
+        {"hooks": {"Stop": [{"block": True, "once": True, "message": "again"}]}},
+        trusted=True,
+    )
+    first = engine.stop("done")
+    second = engine.stop("done")
+    assert first.block is True
+    assert second.block is False

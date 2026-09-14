@@ -14,7 +14,7 @@
     <text x="360" y="234" text-anchor="middle" font-size="13">Autocompact if over char budget</text>
 
     <rect x="210" y="278" width="300" height="48" rx="10" fill="#ede9fe" stroke="#7c3aed"/>
-    <text x="360" y="308" text-anchor="middle" font-size="13">Call Gemini (tools + system)</text>
+    <text x="360" y="308" text-anchor="middle" font-size="13">Stream Gemini (LLM stays in loop)</text>
 
     <polygon points="360,352 455,392 360,432 265,392" fill="#fef3c7" stroke="#d97706"/>
     <text x="360" y="397" text-anchor="middle" font-size="12" font-weight="600">Truncated?</text>
@@ -48,10 +48,10 @@
     <text x="360" y="796" text-anchor="middle" font-size="11">preserve submission order</text>
 
     <rect x="210" y="844" width="300" height="48" rx="10" fill="#dbeafe" stroke="#2563eb"/>
-    <text x="360" y="874" text-anchor="middle" font-size="13">Append results ∑ PostToolUse ∑ loop</text>
+    <text x="360" y="874" text-anchor="middle" font-size="13">Append results ù PostToolUse ù loop</text>
 
     <rect x="210" y="920" width="300" height="40" rx="10" fill="#fee2e2" stroke="#dc2626"/>
-    <text x="360" y="946" text-anchor="middle" font-size="12">Max turns í Terminal max_turns</text>
+    <text x="360" y="946" text-anchor="middle" font-size="12">Max turns ù Terminal max_turns</text>
   </g>
 
   <g stroke="#4b5563" stroke-width="1.5" fill="none">

@@ -1,0 +1,10 @@
+id: truncated_then_complete
+user: Explain briefly
+mode: dont_ask
+script:
+  - text: partial
+    truncated: true
+  - text: Full answer after slot escalation.
+expect:
+  terminal: completed
+  answer_contains: Full answer

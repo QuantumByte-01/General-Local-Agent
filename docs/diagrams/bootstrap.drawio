@@ -13,7 +13,7 @@
         <mxCell id="b2" value="2. Workspace&#10;AGENT_BASE_DIR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="230" y="80" width="160" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="b3" value="3. Parallel load&#10;memory · skill frontmatter&#10;hooks.json snapshot · MCP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="b3" value="3. Parallel load&#10;memory · skills · hooks&#10;MCP servers · LLM warmup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="420" y="80" width="220" height="80" as="geometry" />
         </mxCell>
         <mxCell id="b4" value="4. Register built-in&#10;+ wrapped MCP tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">

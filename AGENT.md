@@ -7,7 +7,8 @@ Local computer agent for this workspace. Prefer tools over guesses. Keep secrets
 - Python 3.12, `uv` for deps
 - Stay inside `AGENT_BASE_DIR`
 - Do not add AI tools as git co-authors
-- Architecture: query loop + self-describing tools + named permission modes
+- Architecture: query loop + self-describing tools + named permission modes + MCP
+- Keep the LLM in the loop; prefer flash + streaming for latency
 
 ## Pointers
 

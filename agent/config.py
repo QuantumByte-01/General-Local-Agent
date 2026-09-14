@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 
 
 DEFAULT_MODELS = [
-    "gemini-2.5-pro",
     "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
+    "gemini-2.5-pro",
     "gemini-2.0-flash",
 ]
 
@@ -30,6 +30,10 @@ class Settings:
     tool_result_chars: int = 12_000
     mcp_config: Path | None = None
     hooks_config: Path | None = None
+    low_latency: bool = True
+    thinking_budget: int | None = 0
+    stream: bool = True
+    llm_timeout_ms: int = 30_000
 
 
 def _split_csv(raw: str) -> list[str]:
@@ -50,6 +54,23 @@ def load_settings(project_root: Path | None = None) -> Settings:
     models = _split_csv(os.getenv("GEMINI_MODEL_PREFERENCE", "") or os.getenv("GEMINI_MODELS", ""))
     mcp_path = project_root / "mcp.json"
     hooks_path = project_root / "hooks.json"
+    low_latency = os.getenv("AGENT_LOW_LATENCY", "1").strip().lower() not in {"0", "false", "no"}
+    thinking_raw = os.getenv("AGENT_THINKING_BUDGET")
+    if thinking_raw is None or not thinking_raw.strip():
+        thinking_budget: int | None = 0 if low_latency else None
+    else:
+        try:
+            thinking_budget = int(thinking_raw.strip())
+        except ValueError:
+            thinking_budget = 0 if low_latency else None
+    timeout_raw = os.getenv("AGENT_LLM_TIMEOUT_MS", "").strip()
+    if timeout_raw:
+        try:
+            llm_timeout_ms = int(timeout_raw)
+        except ValueError:
+            llm_timeout_ms = 30_000 if low_latency else 60_000
+    else:
+        llm_timeout_ms = 30_000 if low_latency else 60_000
     return Settings(
         workspace=workspace,
         project_root=project_root,
@@ -59,4 +80,8 @@ def load_settings(project_root: Path | None = None) -> Settings:
         permission_mode=os.getenv("AGENT_PERMISSION_MODE", "default").strip() or "default",
         mcp_config=mcp_path if mcp_path.exists() else None,
         hooks_config=hooks_path if hooks_path.exists() else None,
+        low_latency=low_latency,
+        thinking_budget=thinking_budget,
+        stream=low_latency,
+        llm_timeout_ms=llm_timeout_ms,
     )

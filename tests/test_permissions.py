@@ -26,3 +26,5 @@ def test_yes_no():
     assert is_affirmative("yes") is True
     assert is_affirmative("no") is False
     assert is_affirmative("maybe") is None
+    assert is_affirmative(True) is True
+    assert is_affirmative(False) is False

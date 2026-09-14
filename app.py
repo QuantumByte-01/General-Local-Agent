@@ -68,12 +68,26 @@ async def agent_turn(user_msg: str, history: list, mode: str, log: str):
                 live_log = (live_log + "\n" + piece).strip()
                 yield history, live_log, ""
             continue
+        if event.kind == "text_delta":
+            chunk = event.text or ""
+            if history and history[-1].get("role") == "assistant":
+                history[-1] = {
+                    "role": "assistant",
+                    "content": (history[-1].get("content") or "") + chunk,
+                }
+            else:
+                history.append({"role": "assistant", "content": chunk})
+            yield history, live_log, ""
+            continue
         if event.kind == "permission_request":
             history.append({"role": "assistant", "content": piece or event.reason})
             yield history, live_log, ""
             continue
         if event.kind == "assistant":
-            history.append({"role": "assistant", "content": event.text})
+            if history and history[-1].get("role") == "assistant":
+                history[-1] = {"role": "assistant", "content": event.text}
+            else:
+                history.append({"role": "assistant", "content": event.text})
             yield history, live_log, ""
             continue
         if event.kind == "terminal":
@@ -131,6 +145,7 @@ def main() -> None:
                 ["Read AGENT.md and explain how the query loop works"],
                 ["What is using CPU and RAM on this machine?"],
                 ["Search the web for Model Context Protocol stdio transport and cite sources"],
+                ["Use the MCP echo tool if it is connected, then summarize AGENT.md"],
             ],
             inputs=user_in,
         )

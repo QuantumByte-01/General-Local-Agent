@@ -1,0 +1,10 @@
+id: permission_pause
+user: Write notes.md
+mode: default
+script:
+  - tool_calls:
+      - name: write_file
+        arguments: {path: notes.md, content: hi}
+expect:
+  pending: true
+  files_absent: [notes.md]

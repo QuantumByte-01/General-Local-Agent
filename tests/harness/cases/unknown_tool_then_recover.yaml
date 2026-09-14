@@ -1,0 +1,12 @@
+id: unknown_tool_then_recover
+user: Do something weird
+mode: dont_ask
+script:
+  - tool_calls:
+      - name: not_a_real_tool
+        arguments: {}
+  - text: That tool does not exist. I stopped.
+expect:
+  terminal: completed
+  tools: [not_a_real_tool]
+  answer_contains: does not exist

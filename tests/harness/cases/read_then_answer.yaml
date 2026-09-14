@@ -1,0 +1,14 @@
+id: read_then_answer
+user: Read hello.txt and tell me what it says
+mode: dont_ask
+workspace_files:
+  hello.txt: hello world
+script:
+  - tool_calls:
+      - name: read_file
+        arguments: {path: hello.txt}
+  - text: The file says hello world
+expect:
+  terminal: completed
+  tools: [read_file]
+  answer_contains: hello world

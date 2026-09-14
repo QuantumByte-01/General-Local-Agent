@@ -16,7 +16,7 @@
         <mxCell id="n3" value="Autocompact if over char budget" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="300" y="220" width="300" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="n4" value="Call Gemini (tools + system instruction)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+        <mxCell id="n4" value="Stream Gemini (tools + system; LLM stays in the loop)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
           <mxGeometry x="300" y="300" width="300" height="50" as="geometry" />
         </mxCell>
         <mxCell id="d1" value="Truncated?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">

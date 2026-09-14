@@ -1,6 +1,6 @@
-import asyncio
+import pytest
 
-from agent.tools.base import Tool, ToolContext, ToolResult
+from agent.tools.base import Tool, ToolResult
 from agent.tools.executor import execute_batches, partition_calls
 from agent.tools.pipeline import PreparedCall
 
@@ -53,7 +53,8 @@ class _Ctx:
         return None
 
 
-def test_execute_preserves_order():
+@pytest.mark.asyncio
+async def test_execute_preserves_order():
     safe = _Safe()
     unsafe = _Unsafe()
     calls = [
@@ -61,5 +62,5 @@ def test_execute_preserves_order():
         PreparedCall("2", "unsafe", {}, unsafe),
         PreparedCall("3", "safe", {}, safe),
     ]
-    results = asyncio.run(execute_batches(calls, _Ctx(), 1000))
+    results = await execute_batches(calls, _Ctx(), 1000)
     assert [r.output for r in results] == ["ok", "serial", "ok"]

@@ -1,0 +1,11 @@
+id: path_escape_blocked
+user: Write outside the workspace
+mode: dont_ask
+script:
+  - tool_calls:
+      - name: write_file
+        arguments: {path: ../escaped.txt, content: nope}
+  - text: The write was rejected because it left the workspace.
+expect:
+  terminal: completed
+  files_absent: [../escaped.txt]

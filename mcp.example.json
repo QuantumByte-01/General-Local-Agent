@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "echo": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "agent.mcp.echo_server"],
+      "timeout": 8
+    }
+  }
+}

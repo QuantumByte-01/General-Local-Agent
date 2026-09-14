@@ -2,7 +2,7 @@
 
 Local Windows agent that **uses tools in a loop**. Architecture follows transferable patterns from [Claude Code from Source](https://claude-code-from-source.com/) — original Python, not a port of Anthropic source.
 
-**Docs:** [Architecture](docs/ARCHITECTURE.md) · [Usage](docs/USAGE.md) · [Diagrams](docs/diagrams/README.md)
+**Docs:** [Architecture](docs/ARCHITECTURE.md) · [Usage](docs/USAGE.md) · [Testing](docs/TESTING.md) · [Diagrams](docs/diagrams/README.md)
 
 ## Architecture
 
@@ -20,7 +20,7 @@ The query loop, tool pipeline, and bootstrap:
 
 1. Copy `.env.example` to `.env`.
 2. Set `GEMINI_API_KEY` (comma-separated keys allowed) and `AGENT_BASE_DIR`.
-3. Optional: `TAVILY_API_KEY`, `mcp.json` servers.
+3. Optional: `TAVILY_API_KEY`, copy `mcp.example.json` to `mcp.json`. Flash is the default model for lower latency; the LLM is still used.
 
 ```powershell
 uv sync
@@ -36,4 +36,5 @@ Permission modes: `plan` (read-only) · `default` (confirm writes/shell) · `acc
 ```powershell
 uv sync --extra dev
 uv run pytest
+uv run python -m agent.harness
 ```

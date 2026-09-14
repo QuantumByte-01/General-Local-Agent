@@ -13,7 +13,7 @@
         <mxCell id="ui" value="Gradio UI (app.py)&#10;chat · trace · permission mode" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="240" y="60" width="240" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="boot" value="Bootstrap&#10;env · skills meta · hooks snapshot · MCP connect" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="boot" value="Bootstrap&#10;env · skills · hooks · MCP (parallel) · LLM warmup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="520" y="60" width="280" height="70" as="geometry" />
         </mxCell>
         <mxCell id="state" value="Two-tier state&#10;SessionState (infra) + AppState (UI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
@@ -22,7 +22,7 @@
         <mxCell id="loop" value="Query loop (async generator)&#10;compact → model → tools → results → repeat&#10;Terminal: completed | ask | max_turns | error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
           <mxGeometry x="240" y="180" width="400" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="llm" value="Gemini client&#10;sticky model latch&#10;slot reservation 8K→64K" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+        <mxCell id="llm" value="Gemini client&#10;reused HTTP + stream · flash first&#10;thinking off · latch + 8K→64K" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
           <mxGeometry x="680" y="180" width="220" height="90" as="geometry" />
         </mxCell>
         <mxCell id="prompts" value="System prompt&#10;AGENT.md + recalled memory + skill menu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">

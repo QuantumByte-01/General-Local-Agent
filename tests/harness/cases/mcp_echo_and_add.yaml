@@ -1,0 +1,15 @@
+id: mcp_echo_and_add
+user: Echo ping and add 2 and 3
+mode: dont_ask
+mcp: true
+script:
+  - tool_calls:
+      - name: mcp_harness_echo
+        arguments: {text: ping}
+      - name: mcp_harness_add
+        arguments: {a: 2, b: 3}
+  - text: "MCP echo returned ping and add returned 5."
+expect:
+  terminal: completed
+  tools: [mcp_harness_echo, mcp_harness_add]
+  answer_contains: "5"

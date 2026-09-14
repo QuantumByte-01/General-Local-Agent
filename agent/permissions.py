@@ -47,10 +47,12 @@ def resolve_permission(
     return PermissionResult("ask", f"{risk} actions need confirmation")
 
 
-def is_affirmative(text: str) -> bool | None:
-    if not text or not text.strip():
+def is_affirmative(text: str | bool | None) -> bool | None:
+    if isinstance(text, bool):
+        return text
+    if not text or not str(text).strip():
         return None
-    token = text.strip().lower()
+    token = str(text).strip().lower()
     yes = {
         "yes", "y", "ok", "okay", "sure", "proceed", "continue",
         "confirm", "go ahead", "run", "execute", "allow", "approve",

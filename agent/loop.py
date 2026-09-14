@@ -9,6 +9,7 @@ from agent.events import (
     PermissionRequest,
     Status,
     Terminal,
+    TextDelta,
     ToolFinished,
     ToolStarted,
 )
@@ -63,22 +64,28 @@ async def run_query(
     elif user_text:
         app.messages.append(ChatMessage(role="user", content=user_text))
 
-    recall_query = user_text or (app.messages[-1].content if app.messages else "")
-    memory_excerpt = engine.memory.keyword_recall(recall_query, session.session_id)
-    agent_md = ""
-    agent_path = engine.workspace / "AGENT.md"
-    if agent_path.exists():
-        agent_md = agent_path.read_text(encoding="utf-8", errors="replace")[:6000]
-    mcp_names = [t.name for t in engine.registry.all() if t.name.startswith("mcp_")]
-    system = build_system_prompt(
-        workspace=engine.workspace,
-        permission_mode=session.permission_mode,
-        skill_menu=engine.skills.menu(),
-        memory_excerpt=memory_excerpt,
-        mcp_tools=mcp_names,
-        agent_md=agent_md,
-        is_subagent=is_subagent,
-    )
+    if resume and getattr(engine, "_system_prompt", None):
+        system = engine._system_prompt
+    else:
+        recall_query = user_text or (app.messages[-1].content if app.messages else "")
+        memory_excerpt = engine.memory.keyword_recall(recall_query, session.session_id)
+        agent_md = ""
+        agent_path = engine.workspace / "AGENT.md"
+        if agent_path.exists():
+            agent_md = agent_path.read_text(encoding="utf-8", errors="replace")[:6000]
+        mcp_names = [t.name for t in engine.registry.all() if t.name.startswith("mcp_")]
+        system = build_system_prompt(
+            workspace=engine.workspace,
+            permission_mode=session.permission_mode,
+            skill_menu=engine.skills.menu(),
+            memory_excerpt=memory_excerpt,
+            mcp_tools=mcp_names,
+            agent_md=agent_md,
+            is_subagent=is_subagent,
+        )
+        engine._system_prompt = system
+
+    tool_defs = engine.registry.schemas_for_llm()
 
     turns = 0
     output_tokens_cap = session.max_output_tokens
@@ -93,12 +100,29 @@ async def run_query(
 
         yield Status(text=f"Model turn {turns}…")
         try:
-            llm_turn = await engine.llm.generate(
-                system=system,
-                messages=app.messages,
-                tool_defs=engine.registry.schemas_for_llm(),
-                max_output_tokens=output_tokens_cap,
-            )
+            llm_turn = None
+            streamer = getattr(engine.llm, "stream_generate", None)
+            use_stream = callable(streamer) and getattr(settings, "stream", True)
+            if use_stream:
+                async for kind, payload in streamer(
+                    system=system,
+                    messages=app.messages,
+                    tool_defs=tool_defs,
+                    max_output_tokens=output_tokens_cap,
+                ):
+                    if kind == "text" and payload:
+                        yield TextDelta(text=str(payload))
+                    elif kind == "turn":
+                        llm_turn = payload
+                    elif kind == "error":
+                        raise payload
+            if llm_turn is None:
+                llm_turn = await engine.llm.generate(
+                    system=system,
+                    messages=app.messages,
+                    tool_defs=tool_defs,
+                    max_output_tokens=output_tokens_cap,
+                )
         except Exception as exc:
             yield Terminal(reason="error", text="", error=str(exc))
             return

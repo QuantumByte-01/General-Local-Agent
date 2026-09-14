@@ -16,6 +16,9 @@ Edit `.env`:
 | `GEMINI_MODEL_PREFERENCE` | Preferred models, first successful latched |
 | `AGENT_BASE_DIR` | Workspace the tools may read/write |
 | `AGENT_PERMISSION_MODE` | `plan` / `default` / `accept_edits` / `dont_ask` |
+| `AGENT_LOW_LATENCY` | `1` (default): stream tokens, skip thinking, reuse HTTP client. LLM still runs. |
+| `AGENT_THINKING_BUDGET` | Gemini thinking tokens. Default `0` when low-latency is on. |
+| `AGENT_LLM_TIMEOUT_MS` | Per-attempt LLM timeout (default `30000` in low-latency). |
 | `TAVILY_API_KEY` | Optional; otherwise DuckDuckGo |
 | `AGENT_HOST` / `AGENT_PORT` | UI bind (default `127.0.0.1:7869`) |
 
@@ -67,9 +70,11 @@ Written under `.gla/memory/`:
 }
 ```
 
-SSE: `{ "url": "http://127.0.0.1:3000/sse", "transport": "sse" }`.
+A local echo server is in `mcp.example.json` (`python -m agent.mcp.echo_server`). Copy it to `mcp.json` to enable. Servers connect in parallel with an 8s timeout each.
 
-Tools appear as `mcp_<server>_<tool>`. Failed servers show in the UI banner; the rest of the agent still starts.
+## Latency
+
+The LLM stays in the loop. Defaults favor flash models, reuse the Gemini HTTP client, stream tokens to the UI, skip thinking tokens (`AGENT_THINKING_BUDGET=0`), cache tool schemas, and skip prompt rebuild on permission resume. Set `AGENT_LOW_LATENCY=0` to turn streaming/thinking overrides off.
 
 ## Hooks
 
@@ -99,4 +104,7 @@ Tools appear as `mcp_<server>_<tool>`. Failed servers show in the UI banner; the
 ```powershell
 uv sync --extra dev
 uv run pytest
+uv run python -m agent.harness
 ```
+
+See [Testing](TESTING.md). The harness drives the real loop with a scripted model (no API key).

@@ -1,0 +1,17 @@
+id: glob_and_grep
+user: Find TODO in py files
+mode: dont_ask
+workspace_files:
+  src/app.py: "print('ok')\n# TODO: later\n"
+  src/skip.txt: TODO should not match txt unless grepped
+script:
+  - tool_calls:
+      - name: glob_files
+        arguments: {pattern: "**/*.py"}
+      - name: grep
+        arguments: {pattern: TODO, glob: "*.py"}
+  - text: Found a TODO in src/app.py
+expect:
+  terminal: completed
+  tools: [glob_files, grep]
+  answer_contains: app.py

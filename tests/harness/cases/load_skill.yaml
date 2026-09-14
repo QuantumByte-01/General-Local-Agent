@@ -1,0 +1,12 @@
+id: load_skill
+user: Summarize a PDF
+mode: dont_ask
+script:
+  - tool_calls:
+      - name: load_skill
+        arguments: {name: pdf-summarize}
+  - text: Loaded the pdf-summarize skill.
+expect:
+  terminal: completed
+  tools: [load_skill]
+  answer_contains: pdf-summarize

@@ -1,0 +1,15 @@
+id: stop_hook_continues
+user: Finish the task
+mode: dont_ask
+hooks:
+  hooks:
+    Stop:
+      - block: true
+        once: true
+        message: Verify the goal is actually done.
+script:
+  - text: I am done.
+  - text: Rechecked. The goal is done.
+expect:
+  terminal: completed
+  answer_contains: Rechecked

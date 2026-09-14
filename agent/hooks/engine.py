@@ -81,10 +81,18 @@ class HookEngine:
     def stop(self, last_text: str) -> HookHit:
         if self.disabled or not self.trusted:
             return HookHit()
-        for handler in self._handlers("Stop"):
-            if handler.get("block"):
-                return HookHit(
+        hooks = self.snapshot.setdefault("hooks", {})
+        handlers = list(hooks.get("Stop") or [])
+        keep: list[dict[str, Any]] = []
+        result = HookHit()
+        for handler in handlers:
+            if handler.get("block") and not result.block:
+                result = HookHit(
                     block=True,
                     message=str(handler.get("message") or "Stop hook requested continuation"),
                 )
-        return HookHit()
+                if handler.get("once"):
+                    continue
+            keep.append(handler)
+        hooks["Stop"] = keep
+        return result
